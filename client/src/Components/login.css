@@ -1,10 +1,96 @@
 @media all and (min-width: 480px) {
-    .Login {
+    .LoginForm {
         padding: 60px 0;
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        background: linear-gradient(120deg, #2980b9, #8e44ad);
+        height: 100vh;
+        overflow: hidden;
     }
 
-    .Login form {
+    .LoginForm form {
         margin: 0 auto;
         max-width: 320px;
+        padding: 0 40px;
+        box-sizing: border-box;
     }
+
+    .center{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        width: 400px;
+        border-radius: 10px;
+    }
+
+    .center h1{
+        text-align: center;
+        padding: 0 0 20px 0;
+        border-bottom: 1px solid silver;
+    }
+
+    .textfield{
+        position: relative;
+        /* border-radius: 10px; */
+        border-bottom: 2px solid silver;
+        margin: 30px 0;
+    }
+
+    .textfield input{
+        width: 100%;
+        height: 40px;
+        padding: 0 5px;
+        font-size: 16px;
+        border: none;
+        background: none;
+        outline: none;
+    }
+
+    .textfield label{
+        position: absolute;
+        top: 50%;
+        left: 5px;
+        color: #adadad;
+        transform: translateY(-50%);
+        pointer-events: none;
+        transition: .5s;
+    }
+
+    /* .textfield label::after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 5px;
+        width: 100%;
+        height: 100%;
+        border-bottom: 3px solid #2691d9;
+        transform: translateX(-100%);
+        transition: all 0.3s ease;
+      } */
+
+    .content-name{
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        /* padding-bottom: 5px; */
+        transition: all 0.3s ease;
+
+    }
+
+    .form input:focus {
+        outline: none;
+      }
+      .form input:focus + .textfield label .content-name,
+      .form input:valid + .textfield label .content-name {
+        transform: translateY(-200%);
+        font-size: 14px;
+        left: 0px;
+        color: #fce38a;
+      }
+      .form input:focus + .label-name::after,
+      .form input:valid + .label-name::after {
+        transform: translateX(0%);
+      }
+      
 }

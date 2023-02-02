@@ -13,7 +13,11 @@ app.use(
 )
 
 app.post('/login', User.signin)
-
+app.get('/home', async function(req, res){
+  const ID = req.query.ID;
+  const info = await User.getinfo(ID);
+  res.status(200).send(info)
+});
 
 app.get('/', (request, response) => {
     response.json({ info: 'Node.js, Express, and Postgres API' })

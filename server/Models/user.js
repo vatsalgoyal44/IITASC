@@ -1,9 +1,10 @@
 const environment     = process.env.NODE_ENV || 'development';    // set environment
-const configuration   = require('../../knexfile')[environment];   // pull in correct db with env configs
+// const configuration   = require('../../knexfile')[environment];   // pull in correct db with env configs
 const bcrypt          = require('bcrypt')                         // bcrypt will encrypt passwords to be saved in db
 const crypto          = require('crypto')
 const queries         = require('../queries')  
 const jwt             = require("jsonwebtoken");
+const { get } = require('http');
 
 
 const hashPassword = (password) => {
@@ -22,7 +23,7 @@ const createToken = () => {
     })
 }
 
-const signin = (req, res) => {
+const signin = async function(req, res){
     // get user creds from request body
     // find user based on username in request
     // check user's password_digest against pw from request
@@ -60,3 +61,18 @@ const signin = (req, res) => {
         res.status(500).send({ message: err.message });
     });
 };
+
+const getinfo = async function(ID){
+    // const ID = req.body.ID;
+    const queryresponse = await queries.studentinfo(ID);
+    // queryresponse = JSON.parse(queryresponse);
+    // console.log(queryresponse)
+    console.log(typeof queryresponse)
+    return queryresponse
+    // res.status(200).send({
+    //     info: queryresponse
+    // });
+}
+
+module.exports.getinfo = getinfo;
+module.exports.signin = signin;
