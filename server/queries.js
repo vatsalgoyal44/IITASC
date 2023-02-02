@@ -16,3 +16,30 @@ const finduser = (username) => {
     })
     
 }
+
+const departmentlist = () => {
+    pool.query('SELECT * FROM department', (error, results) => {
+        if (error) {
+            throw error
+        }
+        return results.rows
+    })
+}
+
+const courselist = (department) => {
+    pool.query('SELECT * FROM course WHERE dept_name = ${department}', (error, results) => {
+        if (error) {
+            throw error
+        }
+        return results.rows
+    })
+}
+
+const courselistall = () => {
+    pool.query('SELECT * FROM course', (error, results) => {
+        if (error) {
+            throw error
+        }
+        return results.rows
+    })
+}
