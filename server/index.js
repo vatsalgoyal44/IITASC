@@ -21,9 +21,9 @@ app.get('/studentinfo', async (request, response) => {
   authJwt.verifyToken(request, response, User.getinfo)
 });
 
-app.get('/', (request, response) => {
-    response.json({ info: 'Node.js, Express, and Postgres API' })
-  })
+// app.get('/', (request, response) => {
+//     response.json({ info: 'Node.js, Express, and Postgres API' })
+//   })
 
 app.listen(port, () => {
     console.log(`App running on port ${port}.`)
