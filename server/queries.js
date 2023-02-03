@@ -7,15 +7,19 @@ const pool = new Pool({
   port: 5433,
 })
 
-// const finduser = (username) => {
-//     pool.query('SELECT * FROM users WHERE username = ${username}', (error, results) => {
-//         if (error) {
-//             throw error
-//         }
-//         return results.rows[0]
-//     })
-    
-// }
+const finduser = async (username) => {
+    const text = "SELECT * FROM user_password WHERE id = $1"
+    const values = [username]
+
+    try {
+        const res = await pool.query(text, values)
+        return res.rows[0]
+        
+    } catch (err) {
+        console.log(err.stack)
+    }
+
+}
 
 // const departmentlist = () => {
 //     pool.query('SELECT * FROM department', (error, results) => {
@@ -71,11 +75,9 @@ const studentinfo = async (ID) => {
 
 }
 
-module.exports.studentinfo = studentinfo;
-
 const createuser = async (user) => {
-    const text = "INSERT INTO users (username, password, token) VALUES ($1, $2, $3) RETURNING id, token"
-    const values = [user.id, user.password, user.token]
+    const text = "INSERT INTO user_password (id, hashed_password, token) VALUES ($1, $2, $3) RETURNING id, token"
+    const values = [user.username, user.password, user.token]
 
     try {
         const res = await pool.query(text, values)
@@ -85,3 +87,23 @@ const createuser = async (user) => {
         console.log(err.stack)
     }
 }
+
+const updateToken = async (id, token) => {
+    const text = "UPDATE user_password SET token = $2 WHERE id = $1 RETURNING id, token"
+    const values = [id, token]
+
+    try {
+        const res = await pool.query(text, values)
+        console.log(res)
+        return res.rows[0]
+        
+    } catch (err) {
+        console.log(err.stack)
+    }
+}
+
+module.exports.studentinfo = studentinfo;
+module.exports.createuser = createuser;
+module.exports.updateToken = updateToken;
+module.exports.finduser = finduser;
+

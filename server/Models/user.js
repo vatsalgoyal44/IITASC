@@ -4,6 +4,7 @@ const bcrypt          = require('bcrypt')                         // bcrypt will
 const crypto          = require('crypto')
 const queries         = require('../queries')  
 const jwt             = require("jsonwebtoken");
+const config          = require('../config');
 const { get } = require('http');
 
 
@@ -15,38 +16,26 @@ const hashPassword = (password) => {
     )
 }
 
-const createToken = () => {
-    return new Promise((resolve, reject) => {
-        crypto.randomBytes(16, (err, data) => {
-        err ? reject(err) : resolve(data.toString('base64'))
-        })
-    })
-}
-
 const signup = async function(req, res){
-    const user = request.body
+    const user = req.query
+    console.log(req)
     hashPassword(user.password)
     .then((hashedPassword) => {
       delete user.password
       user.password = hashedPassword
     })
-    .then(() => createToken())
-    .then(token => user.token = token)
-    .then(() => queries.createuser(user))
-    .then(user => {
-      delete user.password
+    .then(() => {
+        var token = jwt.sign({ username: user.username }, config.secret, {
+            expiresIn: 86400 // 24 hours
+          });
+        user.token = token;
+        queries.createuser(user)
+    }).then(user => {
+    //   delete user.password
       console.log(user)
-      response.status(201).json({ user })
+      res.status(201).send({ user })
     })
     .catch((err) => console.error(err))
-}
-
-const createUser = (user) => {
-    return database.raw(
-      "INSERT INTO users (username, password, token) VALUES (?, ?, ?) RETURNING id, username, token",
-      [user.username, user.password, user.token]
-    )
-    .then((data) => data.rows[0])
 }
 
 const signin = async function(req, res){
@@ -55,34 +44,40 @@ const signin = async function(req, res){
     // check user's password_digest against pw from request
     // if match, create and save a new token for user
     // send back json to client with token and user info
-    const username = req.body.username;
-    const password = req.body.password;
+    const username = req.query.username;
+    const password = req.query.password;
 
     queries.finduser(username).then(user => {
         if (!user) {
             return res.status(404).send({ message: "User Not found." });
         }
-        var passwordIsValid = bcrypt.compareSync(
-            req.body.password,
-            user.password
-        );
-        if (!passwordIsValid) {
-            return res.status(401).send({
-            accessToken: null,
-            message: "Invalid Password!"
+        bcrypt.compare(
+            password,
+            user.hashed_password
+        ).then((passwordIsValid) => {
+            if (!passwordIsValid) {
+                return res.status(401).send({
+                accessToken: null,
+                message: "Invalid Password!"
+                });
+            }
+            var token = jwt.sign({ username: user.username }, config.secret, {
+                expiresIn: 86400 // 24 hours
             });
-        }
-        var token = jwt.sign({ username: user.username }, config.secret, {
-          expiresIn: 86400 // 24 hours
-        });
-
-        res.status(200).send({
-            username: user.username,
-            email: user.email,
-            accessToken: token
-        });
+            queries.updateToken(username, token).then(user => {
+                res.status(200).send({
+                    id: user.id,
+                    accessToken: token
+                });
+            })
+            .catch((err) => console.error(err));
+            
+        })
+        })
         
-    })
+        
+
+        
     .catch(err => {
         res.status(500).send({ message: err.message });
     });
