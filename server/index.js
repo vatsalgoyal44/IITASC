@@ -5,7 +5,7 @@ const port = 3000
 const authJwt         = require('./Services/authJwt');
 
 
-const User = require('./models/user.js');
+const User = require('./Models/user.js');
 const { request, response } = require('express');
 
 app.use(bodyParser.json())

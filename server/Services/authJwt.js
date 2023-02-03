@@ -6,6 +6,16 @@ const config = require("../config.js");
 verifyToken = (req, res, next) => {
   try{
     const token = req.headers.authorization.split(' ')[1]; 
+    jwt.verify(token, config.secret, (err, decoded) => {
+      if (err) {
+        return res.status(401).send({
+          message: "Unauthorized!"
+        });
+      }
+      req.id = decoded.username;
+      
+      next(req,res);
+    });
   }
   catch {
     return res.status(403).send({
@@ -13,16 +23,7 @@ verifyToken = (req, res, next) => {
     });
   }
 
-  jwt.verify(token, config.secret, (err, decoded) => {
-    if (err) {
-      return res.status(401).send({
-        message: "Unauthorized!"
-      });
-    }
-    req.id = decoded.username;
-    
-    next(req,res);
-  });
+  
 };
 
 const authJwt = {
