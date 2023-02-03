@@ -23,6 +23,32 @@ const createToken = () => {
     })
 }
 
+const signup = async function(req, res){
+    const user = request.body
+    hashPassword(user.password)
+    .then((hashedPassword) => {
+      delete user.password
+      user.password = hashedPassword
+    })
+    .then(() => createToken())
+    .then(token => user.token = token)
+    .then(() => queries.createuser(user))
+    .then(user => {
+      delete user.password
+      console.log(user)
+      response.status(201).json({ user })
+    })
+    .catch((err) => console.error(err))
+}
+
+const createUser = (user) => {
+    return database.raw(
+      "INSERT INTO users (username, password, token) VALUES (?, ?, ?) RETURNING id, username, token",
+      [user.username, user.password, user.token]
+    )
+    .then((data) => data.rows[0])
+}
+
 const signin = async function(req, res){
     // get user creds from request body
     // find user based on username in request
@@ -76,3 +102,4 @@ const getinfo = async function(ID){
 
 module.exports.getinfo = getinfo;
 module.exports.signin = signin;
+module.exports.signup = signup;

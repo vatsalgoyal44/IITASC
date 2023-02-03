@@ -7,33 +7,33 @@ const pool = new Pool({
   port: 5433,
 })
 
-const finduser = (username) => {
-    pool.query('SELECT * FROM users WHERE username = ${username}', (error, results) => {
-        if (error) {
-            throw error
-        }
-        return results.rows[0]
-    })
+// const finduser = (username) => {
+//     pool.query('SELECT * FROM users WHERE username = ${username}', (error, results) => {
+//         if (error) {
+//             throw error
+//         }
+//         return results.rows[0]
+//     })
     
-}
+// }
 
-const departmentlist = () => {
-    pool.query('SELECT * FROM department', (error, results) => {
-        if (error) {
-            throw error
-        }
-        return results.rows
-    })
-}
+// const departmentlist = () => {
+//     pool.query('SELECT * FROM department', (error, results) => {
+//         if (error) {
+//             throw error
+//         }
+//         return results.rows
+//     })
+// }
 
-const courselist = (department) => {
-    pool.query('SELECT * FROM course WHERE dept_name = ${department}', (error, results) => {
-        if (error) {
-            throw error
-        }
-        return results.rows
-    })
-}
+// const courselist = (department) => {
+//     pool.query('SELECT * FROM course WHERE dept_name = ${department}', (error, results) => {
+//         if (error) {
+//             throw error
+//         }
+//         return results.rows
+//     })
+// }
 
 const courselistall = () => {
     pool.query('SELECT * FROM course', (error, results) => {
@@ -72,3 +72,16 @@ const studentinfo = async (ID) => {
 }
 
 module.exports.studentinfo = studentinfo;
+
+const createuser = async (user) => {
+    const text = "INSERT INTO users (username, password, token) VALUES ($1, $2, $3) RETURNING id, token"
+    const values = [user.id, user.password, user.token]
+
+    try {
+        const res = await pool.query(text, values)
+        return res.rows[0]
+        
+    } catch (err) {
+        console.log(err.stack)
+    }
+}

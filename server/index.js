@@ -12,6 +12,7 @@ app.use(
   })
 )
 
+app.post('/signup', User.signup)
 app.post('/login', User.signin)
 app.get('/studentinfo', async function(req, res){
   const ID = req.query.ID;
