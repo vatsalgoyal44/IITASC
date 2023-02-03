@@ -15,8 +15,8 @@ app.use(
   })
 )
 
-app.post('/signup', User.signup)
-app.post('/login', User.signin)
+app.post('/auth/signup', User.signup)
+app.post('/auth/login', User.signin)
 app.get('/studentinfo', async (request, response) => {
   authJwt.verifyToken(request, response, User.getinfo)
 });
