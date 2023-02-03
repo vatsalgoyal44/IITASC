@@ -67,7 +67,7 @@ const getinfo = async function(ID){
     const queryresponse = await queries.studentinfo(ID);
     // queryresponse = JSON.parse(queryresponse);
     // console.log(queryresponse)
-    console.log(typeof queryresponse)
+    console.log(queryresponse)
     return queryresponse
     // res.status(200).send({
     //     info: queryresponse
