@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
-import LoginForm from './Components/pages/loginForm';
-import SignUpForm from './Components/pages/signUp';
+import LoginForm from './Components/authentication/pages/loginForm';
+// import SignUpForm from './Components/authentication/pages/signUp';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 
@@ -10,7 +10,7 @@ function App() {
     <BrowserRouter>
       <Routes >
         <Route path="/login" element={<LoginForm />}/>
-        <Route path="/signup" element={<SignUpForm />}/>
+        {/* <Route path="/signup" element={<SignUpForm />}/> */}
         {/* </Route> */}
       </Routes>
     </BrowserRouter>
