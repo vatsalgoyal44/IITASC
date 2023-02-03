@@ -29,11 +29,10 @@ const signup = async function(req, res){
         const token = jwt.sign({ username: user.username }, config.secret, {
             expiresIn: 86400 // 24 hours
           });
-        queries.createuser(user, token)
-    }).then((user, token) => {
-    //   delete user.password
-      console.log(user)
-      res.status(201).send(user, token)
+        queries.createuser(user, token).then(user => {
+            //   delete user.password
+              res.status(201).send(user)
+            }).catch((err) => console.error(err))
     })
     .catch((err) => console.error(err))
 }

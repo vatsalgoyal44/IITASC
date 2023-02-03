@@ -82,7 +82,8 @@ const createuser = async (user, token) => {
 
     try {
         const res = await pool.query(text, values)
-        return res.rows[0], token
+        res.rows[0].token = token
+        return res.rows[0]
         
     } catch (err) {
         console.log(err.stack)
