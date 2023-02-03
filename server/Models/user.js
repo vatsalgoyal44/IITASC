@@ -6,6 +6,7 @@ const queries         = require('../queries')
 const jwt             = require("jsonwebtoken");
 const config          = require('../config');
 const { get } = require('http');
+const authJwt         = require('../Services/authJwt');
 
 
 const hashPassword = (password) => {
@@ -25,15 +26,14 @@ const signup = async function(req, res){
       user.password = hashedPassword
     })
     .then(() => {
-        var token = jwt.sign({ username: user.username }, config.secret, {
+        const token = jwt.sign({ username: user.username }, config.secret, {
             expiresIn: 86400 // 24 hours
           });
-        user.token = token;
-        queries.createuser(user)
-    }).then(user => {
+        queries.createuser(user, token)
+    }).then((user, token) => {
     //   delete user.password
       console.log(user)
-      res.status(201).send({ user })
+      res.status(201).send(user, token)
     })
     .catch((err) => console.error(err))
 }
@@ -61,36 +61,30 @@ const signin = async function(req, res){
                 message: "Invalid Password!"
                 });
             }
-            var token = jwt.sign({ username: user.username }, config.secret, {
+            
+            let payload = { "username" : username};
+            var token = jwt.sign(payload, config.secret, {
                 expiresIn: 86400 // 24 hours
             });
-            queries.updateToken(username, token).then(user => {
-                res.status(200).send({
-                    id: user.id,
-                    accessToken: token
-                });
-            })
-            .catch((err) => console.error(err));
+
+            res.status(200).send({
+                id: user.id,
+                accessToken: token
+            });
             
         })
         })
-        
-        
-
-        
     .catch(err => {
         res.status(500).send({ message: err.message });
     });
 };
 
-const getinfo = async function(ID){
-    // const ID = req.body.ID;
+const getinfo = async function(req, res){
+    const ID = req.id;
     const queryresponse = await queries.studentinfo(ID);
-    // queryresponse = JSON.parse(queryresponse);
-    // console.log(queryresponse)
     console.log(queryresponse)
-    return queryresponse
-    // res.status(200).send({
+    res.status(200).send(queryresponse)
+        // res.status(200).send({
     //     info: queryresponse
     // });
 }

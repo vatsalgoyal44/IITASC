@@ -4,8 +4,7 @@ const config = require("../config.js");
 // const User = db.user;
 
 verifyToken = (req, res, next) => {
-  let token = req.headers["x-access-token"];
-
+  const token = req.headers.authorization.split(' ')[1]; 
   if (!token) {
     return res.status(403).send({
       message: "No token provided!"
@@ -18,8 +17,9 @@ verifyToken = (req, res, next) => {
         message: "Unauthorized!"
       });
     }
-    req.username = decoded.username;
-    next();
+    req.id = decoded.username;
+    
+    next(req,res);
   });
 };
 

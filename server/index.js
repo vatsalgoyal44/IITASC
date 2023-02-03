@@ -2,8 +2,11 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 const port = 3000
+const authJwt         = require('./Services/authJwt');
 
-const User = require('./models/user.js')
+
+const User = require('./models/user.js');
+const { request, response } = require('express');
 
 app.use(bodyParser.json())
 app.use(
@@ -14,10 +17,8 @@ app.use(
 
 app.post('/signup', User.signup)
 app.post('/login', User.signin)
-app.get('/studentinfo', async function(req, res){
-  const ID = req.query.ID;
-  const info = await User.getinfo(ID);
-  res.status(200).send(info)
+app.get('/studentinfo', async (request, response) => {
+  authJwt.verifyToken(request, response, User.getinfo)
 });
 
 app.get('/', (request, response) => {

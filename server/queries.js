@@ -1,10 +1,11 @@
+const config = require('./config');
 const Pool = require('pg').Pool
 const pool = new Pool({
-  user: 'ezpz2',
-  host: 'localhost',
-  database: 'lab4',
-  password: '1234ezpz',
-  port: 5433,
+    user: config.user,
+    host: config.host,
+    database: config.database,
+    password: config.password,
+    port: config.port,
 })
 
 const finduser = async (username) => {
@@ -75,35 +76,35 @@ const studentinfo = async (ID) => {
 
 }
 
-const createuser = async (user) => {
-    const text = "INSERT INTO user_password (id, hashed_password, token) VALUES ($1, $2, $3) RETURNING id, token"
-    const values = [user.username, user.password, user.token]
+const createuser = async (user, token) => {
+    const text = "INSERT INTO user_password (id, hashed_password) VALUES ($1, $2) RETURNING id"
+    const values = [user.username, user.password]
 
     try {
         const res = await pool.query(text, values)
-        return res.rows[0]
+        return res.rows[0], token
         
     } catch (err) {
         console.log(err.stack)
     }
 }
 
-const updateToken = async (id, token) => {
-    const text = "UPDATE user_password SET token = $2 WHERE id = $1 RETURNING id, token"
-    const values = [id, token]
+// const updateToken = async (id, token) => {
+//     const text = "UPDATE user_password SET token = $2 WHERE id = $1 RETURNING id, token"
+//     const values = [id, token]
 
-    try {
-        const res = await pool.query(text, values)
-        console.log(res)
-        return res.rows[0]
+//     try {
+//         const res = await pool.query(text, values)
+//         console.log(res)
+//         return res.rows[0]
         
-    } catch (err) {
-        console.log(err.stack)
-    }
-}
+//     } catch (err) {
+//         console.log(err.stack)
+//     }
+// }
 
 module.exports.studentinfo = studentinfo;
 module.exports.createuser = createuser;
-module.exports.updateToken = updateToken;
+// module.exports.updateToken = updateToken;
 module.exports.finduser = finduser;
 
