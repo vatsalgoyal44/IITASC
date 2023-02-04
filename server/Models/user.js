@@ -38,13 +38,19 @@ const signup = async function(req, res){
 }
 
 const signin = async function(req, res){
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+
     // get user creds from request body
     // find user based on username in request
     // check user's password_digest against pw from request
     // if match, create and save a new token for user
     // send back json to client with token and user info
-    const username = req.query.username;
-    const password = req.query.password;
+    const username = req.body.username;
+    const password = req.body.password;
 
     queries.finduser(username).then(user => {
         if (!user) {
