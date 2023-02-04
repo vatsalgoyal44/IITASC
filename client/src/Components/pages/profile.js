@@ -45,8 +45,11 @@ const Profile = (props) => {
   // console.log(data)
 
   return (
-    <div >
-      HI{res.status}
+    <div className="Header">
+      Welcome,
+      <h1>
+        Your Name
+      </h1>
     </div>
   );
 }
