@@ -54,7 +54,7 @@ const LoginForm = (props) => {
 
   if (isLoggedIn) {
     console.log(localStorage.getItem("user"))
-    return <Navigate to="/profile" />;
+    return <Navigate to="/home" />;
   }
 
 
@@ -62,9 +62,6 @@ const LoginForm = (props) => {
     return username.length > 0 && password.length > 0;
   }
 
-  function handleSubmit(event) {
-    event.preventDefault();
-  }
 
   return (
     <div class="LoginForm">

@@ -2,6 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 import LoginForm from './Components/authentication/pages/loginForm';
 import Profile from './Components/pages/profile';
+import InstructorProfile from './Components/pages/instprofile';
+import CoursePage from './Components/pages/coursepage';
 import Navbar from './Components/NavigationBar/navbar'
 
 // import SignUpForm from './Components/authentication/pages/signUp';
@@ -16,8 +18,8 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginForm />}/>
           <Route path="/home" element={<Profile />}/>
-          {/* <Route path="/signup" element={<SignUpForm />}/> */}
-          {/* </Route> */}
+          <Route path="/instructor/:id" element={<InstructorProfile />} />
+          <Route path="/course/:course_id" element={<CoursePage />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -12,3 +12,20 @@ export const getstudentinfo = () => {
     return res
 };
 
+export const getinstinfo = (id) => {
+    const header=authHeader();
+    console.log(header)
+    const res = axios.get(API_URL + "instinfo/" + id, {
+        headers: header //the token is a variable which holds the token
+       });
+    return res
+};
+
+export const getcourseinfo = (course_id) => {
+    const header=authHeader();
+    console.log(header)
+    const res = axios.get(API_URL + "courseinfo/" + course_id, {
+        headers: header //the token is a variable which holds the token
+       });
+    return res
+};
