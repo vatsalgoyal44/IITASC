@@ -33,9 +33,7 @@ const Navbar = () => {
             <ul className='nav-links'>
                 <Link to='/home'>
                     <li>
-                        <a>
                             My Profile
-                        </a>
                     </li>
                 </Link>
             </ul>

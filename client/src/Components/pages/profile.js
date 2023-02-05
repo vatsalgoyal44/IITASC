@@ -12,7 +12,8 @@ const Profile = (props) => {
 
   const [res, setRes] = useState('')
   const [loading, setLoading] = useState(true)
-
+  const [cursem, setCursem] = useState([])
+  const [pastsem, setPastsem] = useState([])
 
   let navigate = useNavigate();
   const { isLoggedIn } = useSelector(state => state.auth);
@@ -24,7 +25,6 @@ const Profile = (props) => {
     getstudentinfo().then((res)=>{
       setRes(res);
       console.log(res)
-      setLoading(false)
       if(res.status != 200){
         setLoading(true)
         dispatch(logout())
@@ -32,7 +32,24 @@ const Profile = (props) => {
               navigate("/login");
               window.location.reload();
             })
+        }
+      const courses = res.data.coursedetails
+      const cursemnew = []
+      const pastsemnew = []
+      for(let i = 0; i < courses.length; i++){
+        let course = courses[i]
+        if(course.year=='2010' && course.semester=='Spring'){
+          cursemnew.push(course)
+        }
+        else{
+          pastsemnew.push(course)
+        }
       }
+
+      setCursem(cursemnew)
+      setPastsem(pastsemnew)
+      setLoading(false)
+
     })
   }
 
@@ -69,7 +86,27 @@ const Profile = (props) => {
       </div>
 
       <div className="cursem">
-        
+      <h3>Current Semester</h3>
+      <table className="cursemtable">
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Section</th>
+            <th>Drop Course</th>
+          </tr>
+        </thead>
+        <tbody>
+          {cursem.map(item => {
+            return (
+              <tr key={item.course_id}>
+                <td>{ item.course_id }</td>
+                <td>{ item.sec_id }</td>
+                <td>Drop</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
       </div>
     </div>
   );
