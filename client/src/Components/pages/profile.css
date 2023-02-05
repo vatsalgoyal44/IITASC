@@ -56,12 +56,15 @@
     border-collapse: collapse;
     margin: 25px 0;
     font-size: 1em;
+    /* column-width: 100%; */
     min-width: 100%;
+    table-layout: fixed;
     /* margin-left: auto;
     margin-right: auto; */
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 0 10px rgba(0 ,0 ,0, 0.15);
+    /* column-width: 1px; */
 }
 
 .cursemtable thead tr{
@@ -73,6 +76,8 @@
 .cursemtable th,
 .cursemtable td{
     padding: 12px 15px;
+    width: 150px;
+
 }
 
 .cursemtable tbody tr{

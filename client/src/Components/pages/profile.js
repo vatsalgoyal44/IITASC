@@ -142,6 +142,7 @@ const Profile = (props) => {
               <tr>
                 <th>Course</th>
                 <th>Section</th>
+                <th>Grade</th>
               </tr>
             </thead>
             <tbody>
@@ -150,6 +151,8 @@ const Profile = (props) => {
                   <tr key={item2.course_id}>
                     <td>{ item2.course_id }</td>
                     <td>{ item2.sec_id }</td>
+                    <td>{ item2.grade }</td>
+
                   </tr>
                 );
               })}
