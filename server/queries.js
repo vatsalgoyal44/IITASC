@@ -76,6 +76,66 @@ const studentinfo = async (ID) => {
 
 }
 
+const instinfo = async (ID) => {
+
+    const text = 'SELECT * FROM instructor WHERE id = $1'
+    const values = [ID]
+
+    try {
+        const res = await pool.query(text, values)
+        // return res.rows[0];
+        const text2 = 'SELECT * FROM teaches WHERE id = $1'
+        const values2 = [ID]
+        try {
+            const res2 = await pool.query(text2, values2)
+            // return res.rows[0];
+            return {
+                instructordetails: res.rows[0],
+                coursedetails: res2.rows
+            }
+            
+        } catch (err) {
+            console.log(err.stack)
+        }
+    } catch (err) {
+        console.log(err.stack)
+    }
+
+}
+
+const courseinfo = async (ID) => {
+
+    const text = 'SELECT * FROM course WHERE course_id = $1'
+    const values = [ID]
+    try {
+        const res = await pool.query(text, values)
+        const text2 = 'SELECT * FROM prereq WHERE course_id = $1'
+        const values2 = [ID]
+        try {
+            const res2 = await pool.query(text2, values2)
+            const text3 = 'SELECT * FROM teaches WHERE course_id = $1'
+            const values3 = [ID]
+                try {
+                    const res3 = await pool.query(text3, values3)
+                    return {
+                        coursedetails: res.rows[0],
+                        prereqdetails: res2.rows,
+                        instructordetails: res3.rows
+                    }
+
+                } catch (err) {
+                    console.log(err.stack)
+                }
+        } catch (err) {
+            console.log(err.stack)
+        }
+    } catch (err) {
+        console.log(err.stack)
+    }
+
+}
+
+
 const createuser = async (user, token) => {
     const text = "INSERT INTO user_password (id, hashed_password) VALUES ($1, $2) RETURNING id"
     const values = [user.username, user.password]
@@ -88,6 +148,32 @@ const createuser = async (user, token) => {
     } catch (err) {
         console.log(err.stack)
     }
+}
+
+const searchcourse = async (keystring) => {
+
+    const text = 'SELECT * FROM course WHERE course_id ILIKE $1'
+    const values = ['%'+keystring+'%']
+    
+    try {
+        const res = await pool.query(text, values)
+        
+        const text2 = "SELECT * FROM section WHERE course_id ILIKE $1"
+        const values2 = ['%'+keystring+'%']
+        
+        try {
+            const res2 = await pool.query(text2, values2)
+            return {
+                courses: res.rows,
+                section: res2.rows
+            }
+        } catch (err) {
+            console.log(err.stack)
+        }
+    } catch (err) {
+        console.log(err.stack)
+    }
+
 }
 
 // const updateToken = async (id, token) => {
@@ -105,6 +191,9 @@ const createuser = async (user, token) => {
 // }
 
 module.exports.studentinfo = studentinfo;
+module.exports.searchcourse = searchcourse;
+module.exports.courseinfo = courseinfo;
+module.exports.instinfo = instinfo;
 module.exports.createuser = createuser;
 // module.exports.updateToken = updateToken;
 module.exports.finduser = finduser;
