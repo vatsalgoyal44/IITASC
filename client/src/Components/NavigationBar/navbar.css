@@ -7,13 +7,13 @@
 }
 
 .navbar{
-    line-height: 10vh;
-    height: 10vh;
+    line-height: 7vh;
+    height: 7vh;
     box-shadow: rgba(50, 50, 93, 0.23) 0 10px 10px;
     border-bottom-right-radius: 20px;
     border-bottom-left-radius: 20px;
     margin-bottom: 20px;
-    background-color:#d1e0e0;
+    background-color:#ded7e9;
 }
 .asc{
     font-size: 50px;
@@ -49,27 +49,44 @@ a{    text-decoration: none;
 .cont li a {
     
     text-decoration: none; 
-    transition: 0.1s ease-in-out;
-    color: black;
+    transition: all 0.3s ease-in-out;
+    color: #263238;
     font-size: 20px;
     font-weight: 600;
  
 }
 
 .cont li a:hover{
-    color: aquamarine;
+    color: #c0b7dc;
 }
 
 .cont li a:hover::after{
     content: "";
     width: 40%;
     height: 3px;
-    background: aquamarine;
+    background: #c0b7dc;
     position: absolute;
-    bottom: 30px;
+    bottom: 20px;
     left: 10px;
 }
 
+.cont button {
+    background-color: #263238;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.cont button a{
+    color: azure;
+    font-size: 15px;
+    font-weight: 600;
+    transition: 0.2s ease-in-out;
+}
+
+.cont button a:hover{
+    color: #ded7e9;
+}
 /* .ul li {
     padding:  32px;
     width: 100%;
