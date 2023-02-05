@@ -84,7 +84,7 @@ const signin = async function(req, res){
     });
 };
 
-const getinfo = async function(req, res){
+const studgetinfo = async function(req, res){
     const ID = req.id;
     const queryresponse = await queries.studentinfo(ID);
     console.log(queryresponse)
@@ -94,6 +94,34 @@ const getinfo = async function(req, res){
     // });
 }
 
-module.exports.getinfo = getinfo;
+const instgetinfo = async function(req, res){
+    const { id } = req.params
+    console.log(req)
+    const queryresponse = await queries.instinfo(id);
+    console.log(queryresponse)
+    res.status(200).send(queryresponse)
+}
+
+const coursegetinfo = async function(req, res){
+    const { course_id } = req.params
+    console.log(req)
+    const queryresponse = await queries.courseinfo(course_id);
+    console.log(queryresponse)
+    res.status(200).send(queryresponse)
+}
+
+const searchcourseinfo = async function(req, res){
+    const keystring = req.query.keystring;
+    console.log(req)
+    console.log(keystring)
+    const queryresponse = await queries.searchcourse(keystring);
+    console.log(queryresponse)
+    res.status(200).send(queryresponse)
+}
+
+module.exports.studgetinfo = studgetinfo;
+module.exports.instgetinfo = instgetinfo;
+module.exports.coursegetinfo = coursegetinfo;
+module.exports.searchcourseinfo = searchcourseinfo;
 module.exports.signin = signin;
 module.exports.signup = signup;

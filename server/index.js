@@ -28,8 +28,17 @@ app.use(function(req, res, next) {
 
 app.post('/auth/signup', User.signup)
 app.post('/auth/login', User.signin)
-app.get('/studentinfo', async (request, response) => {
-  authJwt.verifyToken(request, response, User.getinfo)
+app.get('/reg/search', async (request, response) => {
+  authJwt.verifyToken(request, response, User.searchcourseinfo)
+});
+app.get('/studinfo', async (request, response) => {
+  authJwt.verifyToken(request, response, User.studgetinfo)
+});
+app.get('/instinfo/:id', async (request, response) => {
+  authJwt.verifyToken(request, response, User.instgetinfo)
+});
+app.get('/courseinfo/:course_id', async (request, response) => {
+  authJwt.verifyToken(request, response, User.coursegetinfo)
 });
 
 // app.get('/', (request, response) => {
