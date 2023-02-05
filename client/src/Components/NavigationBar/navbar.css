@@ -9,7 +9,11 @@
 .navbar{
     line-height: 10vh;
     height: 10vh;
-    box-shadow: rgba(50, 50, 93, 0.23) 0 30px 30px -20px;
+    box-shadow: rgba(50, 50, 93, 0.23) 0 10px 10px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    margin-bottom: 20px;
+    background-color:#d1e0e0;
 }
 .asc{
     font-size: 50px;
@@ -28,3 +32,47 @@
     max-width: 90%;
     margin: auto;
 }
+
+.nav-links li{
+    list-style: none;
+    position: relative;
+    padding: 0 10px;
+    margin: 0 10px;
+    cursor: pointer;
+    transition: 0.1s ease-in-out;
+
+}
+
+a{    text-decoration: none; 
+
+}
+.cont li a {
+    
+    text-decoration: none; 
+    transition: 0.1s ease-in-out;
+    color: black;
+    font-size: 20px;
+    font-weight: 600;
+ 
+}
+
+.cont li a:hover{
+    color: aquamarine;
+}
+
+.cont li a:hover::after{
+    content: "";
+    width: 40%;
+    height: 3px;
+    background: aquamarine;
+    position: absolute;
+    bottom: 30px;
+    left: 10px;
+}
+
+/* .ul li {
+    padding:  32px;
+    width: 100%;
+    transition: all 0.5 ease-in-out;
+    text-align: center;
+} */

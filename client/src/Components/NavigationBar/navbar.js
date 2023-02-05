@@ -12,7 +12,9 @@ const Navbar = () => {
             <ul className='nav-links'>
                 <Link to='/home'>
                     <li>
-                        My Profile
+                        <a>
+                            My Profile
+                        </a>
                     </li>
                 </Link>
             </ul>
