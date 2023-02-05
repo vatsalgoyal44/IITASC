@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Navigate, useNavigate  } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
-import {getstudentinfo} from "../data/services/user.service";
+import {getstudentinfo, dropCourse} from "../data/services/user.service";
 import { logout } from "../statemanagement/actions/actionCreators";
 import './profile.css';
 import ReactLoading from "react-loading";
@@ -20,6 +20,16 @@ const Profile = (props) => {
   const { message } = useSelector(state => state.message);
   const dispatch = useDispatch();
 
+  const handledropCourse = (item) => {
+      dropCourse(item.course_id, item.year, item.semester).then(res=>{
+        console.log(res)
+
+        if(res.status==200){
+          const cursemnew = cursem.filter((item2)=>item2.course_id!=item.course_id)
+          setCursem(cursemnew)
+        }
+      })
+  }
 
   const fetchdata = ()=>{
     getstudentinfo().then((res)=>{
@@ -115,7 +125,7 @@ const Profile = (props) => {
               <tr key={item.course_id}>
                 <td>{ item.course_id }</td>
                 <td>{ item.sec_id }</td>
-                <td>Drop</td>
+                <td><button onClick={() => handledropCourse(item)}><a>Drop</a></button></td>
               </tr>
             );
           })}

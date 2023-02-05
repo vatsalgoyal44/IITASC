@@ -89,3 +89,21 @@
     border-bottom: solid 2px #f8f5fb;
 }
 
+.cursemtable button{
+    background-color: #263238;
+    padding: 1px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 80px;
+}
+
+.cursemtable button a{
+    color: azure;
+    font-size: 13px;
+    font-weight: 600;
+    transition: 0.1s ease-in-out;
+}
+
+.cursemtable button a:hover{
+    color: #ded7e9;
+}

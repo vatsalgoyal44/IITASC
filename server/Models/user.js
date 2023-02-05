@@ -119,9 +119,25 @@ const searchcourseinfo = async function(req, res){
     res.status(200).send(queryresponse)
 }
 
+const dropCourse = async function(req, res){
+    const course_id = req.body.data.course_id;
+    const year = req.body.data.year;
+    const sem = req.body.data.sem;
+    const ID = req.id;
+    console.log(ID, course_id, year, sem)
+    try{
+        await queries.dropCourse(ID, course_id, year, sem);
+        res.status(200).send()
+    }
+    catch{
+        res.status(401)
+    }
+    
+}
 module.exports.studgetinfo = studgetinfo;
 module.exports.instgetinfo = instgetinfo;
 module.exports.coursegetinfo = coursegetinfo;
 module.exports.searchcourseinfo = searchcourseinfo;
 module.exports.signin = signin;
 module.exports.signup = signup;
+module.exports.dropCourse = dropCourse;

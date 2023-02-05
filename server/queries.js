@@ -176,6 +176,19 @@ const searchcourse = async (keystring) => {
 
 }
 
+const dropCourse = async(ID, course_id, year, sem) =>{
+    const text = 'DELETE FROM takes WHERE id = $1 and course_id = $2 and year = $3 and semester = $4'
+    const values = [ID, course_id, year, sem]
+
+    try{
+        const res = await pool.query(text, values)
+        return res;
+    }
+    catch(err){
+        console.log(err.stack)
+    }
+}
+
 // const updateToken = async (id, token) => {
 //     const text = "UPDATE user_password SET token = $2 WHERE id = $1 RETURNING id, token"
 //     const values = [id, token]
@@ -197,4 +210,5 @@ module.exports.instinfo = instinfo;
 module.exports.createuser = createuser;
 // module.exports.updateToken = updateToken;
 module.exports.finduser = finduser;
+module.exports.dropCourse = dropCourse;
 

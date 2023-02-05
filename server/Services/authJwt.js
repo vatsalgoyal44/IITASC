@@ -5,7 +5,14 @@ const config = require("../config.js");
 
 verifyToken = (req, res, next) => {
   try{
-    const token = req.headers.authorization.split(' ')[1]; 
+    console.log(req.method)
+    let token;
+    if(req.method=='POST'){
+      token = req.body.headers.Authorization.split(' ')[1];
+    } 
+    else{
+      token = req.headers.authorization.split(' ')[1];
+    }
     jwt.verify(token, config.secret, (err, decoded) => {
       if (err) {
         return res.status(401).send({
@@ -13,7 +20,6 @@ verifyToken = (req, res, next) => {
         });
       }
       req.id = decoded.username;
-      
       next(req,res);
     });
   }

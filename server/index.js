@@ -40,7 +40,9 @@ app.get('/instinfo/:id', async (request, response) => {
 app.get('/courseinfo/:course_id', async (request, response) => {
   authJwt.verifyToken(request, response, User.coursegetinfo)
 });
-
+app.post('/studinfo/dropcourse', async(request, response) => {
+  authJwt.verifyToken(request, response,User.dropCourse)
+})
 // app.get('/', (request, response) => {
 //     response.json({ info: 'Node.js, Express, and Postgres API' })
 //   })
