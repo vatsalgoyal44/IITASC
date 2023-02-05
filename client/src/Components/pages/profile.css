@@ -1,0 +1,18 @@
+.homepage{
+    margin: 20px;
+}
+.name{
+    font-size: 60px;
+    font-weight: 600;
+    margin-top: -15px;
+    color: #263238;
+}
+
+.about{
+    padding-left: 15px;
+}
+
+.about h3{
+    color: #263238;
+    font-size: 25px;
+}
