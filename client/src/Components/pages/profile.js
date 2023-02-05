@@ -5,11 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import {getstudentinfo} from "../data/services/user.service";
 import { logout } from "../statemanagement/actions/actionCreators";
 import './profile.css';
+import ReactLoading from "react-loading";
 
 
 const Profile = (props) => {
 
-  const [res, setRes] = useState([])
+  const [res, setRes] = useState('')
+  const [loading, setLoading] = useState(true)
 
 
   let navigate = useNavigate();
@@ -22,7 +24,15 @@ const Profile = (props) => {
     getstudentinfo().then((res)=>{
       setRes(res);
       console.log(res)
-
+      setLoading(false)
+      if(res.status != 200){
+        setLoading(true)
+        dispatch(logout())
+            .then(() => {
+              navigate("/login");
+              window.location.reload();
+            })
+      }
     })
   }
 
@@ -34,29 +44,32 @@ const Profile = (props) => {
   if (!isLoggedIn) {
     return <Navigate to="/login" />;
   }
-
-  // if(res.status != 200){
-  //   dispatch(logout())
-  //       .then(() => {
-  //         navigate("/login");
-  //         window.location.reload();
-  //       })
-  // }
   // console.log(data)
 
-  return (
+  if (loading){
+    return(
+    <div>
+      <ReactLoading type="bubbles" color="#263238" className="loading"
+        height={500} width={250} />
+    </div>)
+  }
+  else return (
     <div className="homepage">
-      Welcome,
+      <p className="welcome">Welcome,</p>
       <h1 className="name">
-        Your Name
+        {res.data.studentdetails.name}
       </h1>
       <div className="about">
         <h3>About</h3>
         <ul>
-          <l1>Student ID: </l1>
-          <l1>Department: </l1>
-
+          <li>Student ID: {res.data.studentdetails.id}</li>
+          <li>Department: {res.data.studentdetails.dept_name}</li>
+          <li>Total Credits: {res.data.studentdetails.tot_cred} </li>
         </ul>
+      </div>
+
+      <div className="cursem">
+        
       </div>
     </div>
   );

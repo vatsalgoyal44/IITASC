@@ -5,7 +5,8 @@ const API_URL = "http://localhost:4000/";
 
 export const getstudentinfo = () => {
     const header=authHeader();
-    const res = axios.get(API_URL + "studentinfo", {
+    console.log(header)
+    const res = axios.get(API_URL + "studinfo", {
         headers: header //the token is a variable which holds the token
        });
     return res

@@ -1,18 +1,40 @@
 .homepage{
-    margin: 20px;
+    margin: 5px;
+}
+
+.welcome{
+    color: #263238;
+    margin-right: 10px;
+    text-align: right;
 }
 .name{
     font-size: 60px;
     font-weight: 600;
     margin-top: -15px;
     color: #263238;
+    margin-right: 10px;
+    text-align: right;
 }
 
 .about{
-    padding-left: 15px;
+    padding-left: 25px;
+    margin-top: -5px;
+    background-color: #f8f5fb;
+    border-radius: 20px;
+    padding-bottom: 20px;
+    padding-top: 10px;
 }
 
 .about h3{
     color: #263238;
     font-size: 25px;
+}
+
+.about ul{
+    margin-left: 15px;
+}
+
+.loading {
+    margin-left: auto;
+    margin-right: auto;
 }
