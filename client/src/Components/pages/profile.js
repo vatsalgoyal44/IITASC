@@ -45,9 +45,23 @@ const Profile = (props) => {
           pastsemnew.push(course)
         }
       }
-
+      const grouped = Object.values(pastsemnew.reduce((acc, item) => {
+        // Append the item to the array for each country
+        // acc[item.year + item.semester] = {...(acc[item.year + item.semester] || []), item};
+        const key = item.year + item.semester
+        console.log(key)
+        if(acc[key]){
+          acc[key].push(item)
+        }
+        else{
+          console.log(item)
+          acc[key] = [item]
+        }
+        return acc;
+    }, {}))
+      console.log(grouped)
       setCursem(cursemnew)
-      setPastsem(pastsemnew)
+      setPastsem(grouped)
       setLoading(false)
 
     })
@@ -107,6 +121,32 @@ const Profile = (props) => {
           })}
         </tbody>
       </table>
+      </div>
+      <div >
+      {pastsem.map(item => {
+        return (
+          <div className="cursem">
+            <h3>{item[0].semester + " "+ item[0].year}</h3>
+          <table className="cursemtable">
+            <thead>
+              <tr>
+                <th>Course</th>
+                <th>Section</th>
+              </tr>
+            </thead>
+            <tbody>
+              {item.map(item2 => {
+                return (
+                  <tr key={item2.course_id}>
+                    <td>{ item2.course_id }</td>
+                    <td>{ item2.sec_id }</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+      </table>
+       </div> )
+      })}      
       </div>
     </div>
   );
