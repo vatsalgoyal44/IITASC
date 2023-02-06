@@ -52,15 +52,11 @@ export const getdeptcourseinfo = (dept_name) => {
 };
 
 
-export const getrunningcourses = (year, sem) => {
+export const getrunningcourses = () => {
     const header=authHeader();
     console.log(header)
     const res = axios.get(API_URL + "runningcourses/", {
         headers: header,
-        params: {
-            year: year,
-            sem: sem
-        } //the token is a variable which holds the token
        });
     return res
 };

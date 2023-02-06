@@ -126,14 +126,14 @@ const deptcoursegetinfo = async function(req, res){
 }
 
 
-const searchcourseinfo = async function(req, res){
-    const keystring = req.query.keystring;
-    console.log(req)
-    console.log(keystring)
-    const queryresponse = await queries.searchcourse(keystring);
-    console.log(queryresponse)
-    res.status(200).send(queryresponse)
-}
+// const searchcourseinfo = async function(req, res){
+//     const keystring = req.query.keystring;
+//     console.log(req)
+//     console.log(keystring)
+//     const queryresponse = await queries.searchcourse(keystring);
+//     console.log(queryresponse)
+//     res.status(200).send(queryresponse)
+// }
 
 const dropCourse = async function(req, res){
     const course_id = req.body.data.course_id;
@@ -161,7 +161,6 @@ module.exports.deptgetinfo = deptgetinfo;
 module.exports.deptcoursegetinfo = deptcoursegetinfo;
 module.exports.instgetinfo = instgetinfo;
 module.exports.coursegetinfo = coursegetinfo;
-module.exports.searchcourseinfo = searchcourseinfo;
 module.exports.signin = signin;
 module.exports.signup = signup;
 module.exports.dropCourse = dropCourse;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Navigate, useNavigate  } from 'react-router-dom';
+import { Navigate, useNavigate, Link  } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import {getrunningcourses} from "../data/services/user.service";
 import { logout } from "../statemanagement/actions/actionCreators";
@@ -15,6 +15,8 @@ const Registration = (props) => {
     const [cursem, setCursem] = useState([])
     const [pastsem, setPastsem] = useState([])
     const [items, setItems] = useState([])
+    const [result, setResult] = useState([])
+
 
     let navigate = useNavigate();
     const { isLoggedIn } = useSelector(state => state.auth);
@@ -25,6 +27,7 @@ const Registration = (props) => {
         getrunningcourses().then(res => {
             
             setItems(res.data);
+            console.log(res.data)
             setLoading(false)
         })
     }
@@ -33,6 +36,13 @@ const Registration = (props) => {
         fetchdata()
     }, [])
 
+    const handleOnSearch = (string, results) => {
+        // onSearch will have as the first callback parameter
+        // the string searched and for the second the results.
+        console.log(string, results)
+        setResult(results)
+      }
+    
     
     if (!isLoggedIn) {
         return <Navigate to="/login" />;
@@ -54,8 +64,11 @@ const Registration = (props) => {
         </h1>
         <div className="search">
           <ReactSearchAutocomplete
-            // items={items}
-            // onSearch={handleOnSearch}
+            items={items}
+            fuseOptions={{ keys: ["course_id"] }}
+            resultStringKeyName={"course_id"}
+
+            onSearch={handleOnSearch}
             // onHover={handleOnHover}
             // onSelect={handleOnSelect}
             // onFocus={handleOnFocus}
@@ -63,6 +76,26 @@ const Registration = (props) => {
             // formatResult={formatResult}
           />
         </div>
+        <table className="cursemtable">
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Title</th>
+            <th>Section</th>
+          </tr>
+        </thead>
+        <tbody>
+          {result.map(item => {
+            return (
+              <tr key={item.course_id}>
+                <td><Link to={"/course/"+item.course_id}>{item.course_id}</Link></td>
+                <td><Link to={"/course/"+item.course_id}>{item.title}</Link></td>
+                <td>{ item.sec_id }</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
       </div>
     );
   }

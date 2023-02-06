@@ -28,9 +28,9 @@ app.use(function(req, res, next) {
 
 app.post('/auth/signup', User.signup)
 app.post('/auth/login', User.signin)
-app.get('/search', async (request, response) => {
-  authJwt.verifyToken(request, response, User.searchcourseinfo)
-});
+// app.get('/search', async (request, response) => {
+//   authJwt.verifyToken(request, response, User.searchcourseinfo)
+// });
 app.get('/studinfo', async (request, response) => {
   authJwt.verifyToken(request, response, User.studgetinfo)
 });
