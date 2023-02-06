@@ -1,0 +1,89 @@
+.deptpage{
+    margin: 5px;
+}
+
+.insthomepage{
+    margin: 5px;
+}
+
+.welcome{
+    color: #263238;
+    margin-right: 10px;
+    text-align: right;
+}
+.name{
+    font-size: 60px;
+    font-weight: 600;
+    margin-top: -15px;
+    color: #263238;
+    margin-right: 10px;
+    text-align: right;
+}
+
+.about{
+    padding-left: 25px;
+    margin-top: -5px;
+    background-color: #f8f5fb;
+    border-radius: 20px;
+    padding-bottom: 20px;
+    padding-top: 10px;
+}
+
+.about h3{
+    color: #263238;
+    font-size: 25px;
+}
+
+.about ul{
+    margin-left: 15px;
+}
+
+.loading {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cursem h3{
+    color: #263238;
+    font-size: 25px;
+    margin-left: 20px;
+    margin-bottom: -20px;
+    margin-top: 20px;
+}
+.cursemtable{
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 1em;
+    min-width: 100%;
+    /* margin-left: auto;
+    margin-right: auto; */
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0 ,0 ,0, 0.15);
+}
+
+.cursemtable thead tr{
+    background-color: #f8f5fb;
+    text-align: left;
+    font-weight: bold;
+}
+
+.cursemtable th,
+.cursemtable td{
+    padding: 12px 15px;
+}
+
+.cursemtable tbody tr{
+    border-bottom: 1px #263238;
+}
+
+.cursemtable tbody tr:nth-of-type(even){
+    background-color: #fcfbfd;
+}
+
+.cursemtable tbody tr:last-of-type{
+    /* border-style: solid; */
+
+    border-bottom: solid 2px #f8f5fb;
+}
+

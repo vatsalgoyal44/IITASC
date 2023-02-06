@@ -77,23 +77,39 @@ const studentinfo = async (ID) => {
 }
 
 const instinfo = async (ID) => {
-
-    const text = 'SELECT * FROM instructor WHERE id = $1'
+    //beware of dept_name in both course and instructor
+    const text = 'SELECT * \
+                  FROM instructor natural join teaches join course using(course_ID) natural join section natural join reg_dates \
+                  WHERE id = $1 \
+                  and start_time<=now() \
+                  and start_time>=all (SELECT start_time from reg_dates) \
+                  ORDER BY course_id ASC'
     const values = [ID]
 
     try {
         const res = await pool.query(text, values)
-        // return res.rows[0];
-        const text2 = 'SELECT * FROM teaches WHERE id = $1'
+        const text2 = 'SELECT * \
+                       FROM instructor natural join teaches join course using(course_ID) natural join section natural join reg_dates \
+                       WHERE id = $1 \
+                       and start_time<=now() \
+                       and start_time<some (SELECT start_time from reg_dates)\
+                       ORDER BY start_time DESC, course_id ASC'
         const values2 = [ID]
         try {
             const res2 = await pool.query(text2, values2)
-            // return res.rows[0];
-            return {
-                instructordetails: res.rows[0],
-                coursedetails: res2.rows
-            }
-            
+            const text3 = 'SELECT * \
+                           FROM instructor where id=$1'
+            const values3 = [ID]
+            try {
+                const res3 = await pool.query(text3, values3)
+                return {
+                            instructordetails: res3.rows,
+                            thissemcourses: res.rows,
+                            prevsemcourses: res2.rows
+                        }            
+            } catch (err) {
+                console.log(err.stack)
+            }           
         } catch (err) {
             console.log(err.stack)
         }
@@ -104,21 +120,34 @@ const instinfo = async (ID) => {
 }
 
 const courseinfo = async (ID) => {
+    const text = 'SELECT * \
+                  FROM course natural join section natural join reg_dates \
+                  WHERE course_id = $1 \
+                  and start_time<=now() \
+                  and start_time>=all (SELECT start_time from reg_dates)'
 
-    const text = 'SELECT * FROM course WHERE course_id = $1'
     const values = [ID]
     try {
+        console.log(text)
+        console.log(values)
         const res = await pool.query(text, values)
-        const text2 = 'SELECT * FROM prereq WHERE course_id = $1'
+        console.log(res)
+        const text2 = 'SELECT * \
+                       FROM prereq join course on (prereq_id=course.course_id)\
+                       WHERE prereq.course_id = $1'
         const values2 = [ID]
         try {
             const res2 = await pool.query(text2, values2)
-            const text3 = 'SELECT * FROM teaches WHERE course_id = $1'
+            console.log(res2)
+            const text3 = 'SELECT * FROM teaches natural join section natural join reg_dates natural join instructor \
+                           WHERE course_id = $1 \
+                           and start_time<=now() \
+                           and start_time>=all (SELECT start_time from reg_dates)'
             const values3 = [ID]
                 try {
                     const res3 = await pool.query(text3, values3)
                     return {
-                        coursedetails: res.rows[0],
+                        coursedetails: res.rows,
                         prereqdetails: res2.rows,
                         instructordetails: res3.rows
                     }
@@ -133,6 +162,49 @@ const courseinfo = async (ID) => {
         console.log(err.stack)
     }
 
+}
+
+const deptinfo = async () => {
+    //be careful of building while natural join department and section
+    const text = 'SELECT A.dept_name \
+                  FROM department A \
+                  WHERE exists \
+                  (select * from department as B natural join course join section using(course_ID) natural join reg_dates \
+                  WHERE A.dept_name=B.dept_name \
+                  and start_time<=now() \
+                  and start_time>=all (SELECT start_time from reg_dates))'
+    try {
+        console.log(text)
+        const res = await pool.query(text)
+        console.log(res)
+        return {
+            deptdetails: res.rows
+        }
+    } catch (err) {
+        console.log(err.stack)
+    }
+
+}
+
+const deptcourseinfo = async (dept_name) => {
+    //be careful of building while natural join department and section
+    const text = 'SELECT * \
+                  FROM course natural join section natural join reg_dates \
+                  WHERE dept_name=$1 \
+                  and start_time<=now() \
+                  and start_time>=all (SELECT start_time from reg_dates)'
+    const values = [dept_name]
+    try {
+        console.log(text)
+        console.log(values)
+        const res = await pool.query(text,values)
+        console.log(res)
+        return {
+            courses: res.rows
+        }
+    } catch (err) {
+        console.log(err.stack)
+    }
 }
 
 
@@ -191,6 +263,8 @@ const searchcourse = async (keystring) => {
 // }
 
 module.exports.studentinfo = studentinfo;
+module.exports.deptinfo = deptinfo;
+module.exports.deptcourseinfo = deptcourseinfo;
 module.exports.searchcourse = searchcourse;
 module.exports.courseinfo = courseinfo;
 module.exports.instinfo = instinfo;

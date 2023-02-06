@@ -110,6 +110,22 @@ const coursegetinfo = async function(req, res){
     res.status(200).send(queryresponse)
 }
 
+const deptgetinfo = async function(req, res){
+    console.log(req)
+    const queryresponse = await queries.deptinfo();
+    console.log(queryresponse)
+    res.status(200).send(queryresponse)
+}
+
+const deptcoursegetinfo = async function(req, res){
+    const { dept_name } = req.params
+    console.log(req)
+    const queryresponse = await queries.deptcourseinfo(dept_name);
+    console.log(queryresponse)
+    res.status(200).send(queryresponse)
+}
+
+
 const searchcourseinfo = async function(req, res){
     const keystring = req.query.keystring;
     console.log(req)
@@ -120,6 +136,8 @@ const searchcourseinfo = async function(req, res){
 }
 
 module.exports.studgetinfo = studgetinfo;
+module.exports.deptgetinfo = deptgetinfo;
+module.exports.deptcoursegetinfo = deptcoursegetinfo;
 module.exports.instgetinfo = instgetinfo;
 module.exports.coursegetinfo = coursegetinfo;
 module.exports.searchcourseinfo = searchcourseinfo;
