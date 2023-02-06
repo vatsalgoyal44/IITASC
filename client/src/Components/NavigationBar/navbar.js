@@ -41,6 +41,11 @@ const Navbar = () => {
                             Registration
                     </li>
                 </Link>
+                <Link to='/course/running'>
+                    <li>
+                            Running Courses
+                    </li>
+                </Link>
             </ul>
             <button onClick={handlelogout}><a>Logout</a></button>
             </div>

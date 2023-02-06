@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { Navigate, useNavigate  } from 'react-router-dom';
+import { Navigate, useNavigate , Link } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import {getstudentinfo, dropCourse} from "../data/services/user.service";
 import { logout } from "../statemanagement/actions/actionCreators";
@@ -115,6 +115,7 @@ const Profile = (props) => {
         <thead>
           <tr>
             <th>Course</th>
+            <th>Title</th>
             <th>Section</th>
             <th>Drop Course</th>
           </tr>
@@ -123,7 +124,8 @@ const Profile = (props) => {
           {cursem.map(item => {
             return (
               <tr key={item.course_id}>
-                <td>{ item.course_id }</td>
+                <td><Link to={"/course/"+item.course_id}>{item.course_id}</Link></td>
+                <td><Link to={"/course/"+item.course_id}>{item.title}</Link></td>
                 <td>{ item.sec_id }</td>
                 <td><button onClick={() => handledropCourse(item)}><a>Drop</a></button></td>
               </tr>
@@ -141,6 +143,7 @@ const Profile = (props) => {
             <thead>
               <tr>
                 <th>Course</th>
+                <th>Title</th>
                 <th>Section</th>
                 <th>Grade</th>
               </tr>
@@ -149,7 +152,8 @@ const Profile = (props) => {
               {item.map(item2 => {
                 return (
                   <tr key={item2.course_id}>
-                    <td>{ item2.course_id }</td>
+                    <td><Link to={"/course/"+item2.course_id}>{item2.course_id}</Link></td>
+                    <td><Link to={"/course/"+item2.course_id}>{item2.title}</Link></td>
                     <td>{ item2.sec_id }</td>
                     <td>{ item2.grade }</td>
 

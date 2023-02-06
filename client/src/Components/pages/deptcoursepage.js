@@ -38,7 +38,7 @@ const DeptCoursePage = (props) => {
 
   useEffect(() => {
     fetchdata()
-  }, [])
+  }, [dept_name])
 
   
   if (!isLoggedIn) {

@@ -39,7 +39,7 @@ const InstructorProfile = (props) => {
 
   useEffect(() => {
     fetchdata()
-  }, [])
+  }, [id])
 
   
   if (!isLoggedIn) {

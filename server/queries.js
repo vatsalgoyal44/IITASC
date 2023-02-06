@@ -57,7 +57,7 @@ const studentinfo = async (ID) => {
     try {
         const res = await pool.query(text, values)
         // return res.rows[0];
-        const text2 = 'SELECT * FROM takes WHERE id = $1'
+        const text2 = 'SELECT * FROM takes NATURAL JOIN course WHERE id = $1'
         const values2 = [ID]
         try {
             const res2 = await pool.query(text2, values2)
@@ -262,7 +262,7 @@ const dropCourse = async(ID, course_id, year, sem) =>{
 }
 
 const runningCourses = async() => {
-    const text = 'SELECT * FROM section NATURAL JOIN reg_dates WHERE start_date::date >= all(SELECT start_date from reg_dates)'
+    const text = 'SELECT * FROM section NATURAL JOIN reg_dates WHERE start_time::date >= all(SELECT start_time from reg_dates)'
     const values = []
     try{
         const res = await pool.query(text, values)

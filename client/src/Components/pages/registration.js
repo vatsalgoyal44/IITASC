@@ -15,12 +15,12 @@ const Registration = (props) => {
     const [cursem, setCursem] = useState([])
     const [pastsem, setPastsem] = useState([])
     const [items, setItems] = useState([])
-  
+
     let navigate = useNavigate();
     const { isLoggedIn } = useSelector(state => state.auth);
     const { message } = useSelector(state => state.message);
     const dispatch = useDispatch();
-  
+
     const fetchdata = ()=>{
         getrunningcourses().then(res => {
             
@@ -28,14 +28,14 @@ const Registration = (props) => {
             setLoading(false)
         })
     }
-  
+
     useEffect(() => {
-      fetchdata()
+        fetchdata()
     }, [])
-  
+
     
     if (!isLoggedIn) {
-      return <Navigate to="/login" />;
+        return <Navigate to="/login" />;
     }
     // console.log(data)
   

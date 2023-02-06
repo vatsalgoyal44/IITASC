@@ -21,6 +21,7 @@ const CoursePage = (props) => {
   const { isLoggedIn } = useSelector(state => state.auth);
   const { message } = useSelector(state => state.message);
   const dispatch = useDispatch();
+  const [running, setRunning] = useState(false);
 
 
   const fetchdata = ()=>{
@@ -36,12 +37,18 @@ const CoursePage = (props) => {
               window.location.reload();
             })
       }
+      if(res.data.coursedetails[0]!=null){
+        setRunning(true);
+      }
+      else{
+        setRunning(false);
+      }
     })
   }
 
   useEffect(() => {
     fetchdata()
-  }, [])
+  }, [course_id])
 
   
   if (!isLoggedIn) {
@@ -55,6 +62,13 @@ const CoursePage = (props) => {
       <ReactLoading type="bubbles" color="#263238" className="loading"
         height={500} width={250} />
     </div>)
+  }
+  else if(running!=true){
+    return(
+      <div>
+        <ReactLoading type="bubbles" color="#263238" className="loading"
+          height={500} width={250} />
+      </div>)
   }
   else return (
     <div className="coursepage">
