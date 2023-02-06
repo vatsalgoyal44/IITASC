@@ -190,10 +190,10 @@ const deptcourseinfo = async (dept_name) => {
     //be careful of building while natural join department and section
     const text = 'SELECT * \
                   FROM course natural join section natural join reg_dates \
-                  WHERE dept_name=$1 \
+                  WHERE dept_name=$1 and sec_id=$2\
                   and start_time<=now() \
                   and start_time>=all (SELECT start_time from reg_dates)'
-    const values = [dept_name]
+    const values = [dept_name, 1]
     try {
         console.log(text)
         console.log(values)

@@ -6,6 +6,13 @@ import { logout } from "../statemanagement/actions/actionCreators";
 import './profile.css';
 import ReactLoading from "react-loading";
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
+// import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-dropdown';
+import Select from 'react-select'
+
+
+
 
 
 const Registration = (props) => {
@@ -25,9 +32,14 @@ const Registration = (props) => {
 
     const fetchdata = ()=>{
         getrunningcourses().then(res => {
-            
-            setItems(res.data);
-            console.log(res.data)
+            res = res.data.reduce(function (r, a) {
+                r[a.course_id] = r[a.course_id] || [];
+                r[a.course_id].push(a);
+                return r;
+            }, Object.create(null));
+            console.log(res)
+            setRes(res)
+            setItems((Object.keys(res)).map(course_id=>{return {course_id:course_id}}));
             setLoading(false)
         })
     }
@@ -36,11 +48,16 @@ const Registration = (props) => {
         fetchdata()
     }, [])
 
+    const handleSectionChange = () => {
+
+    }
+
     const handleOnSearch = (string, results) => {
         // onSearch will have as the first callback parameter
         // the string searched and for the second the results.
         console.log(string, results)
-        setResult(results)
+        console.log(results.map(result=>{return res[result.course_id]}))
+        setResult(results.map(result=>{return res[result.course_id]}))
       }
     
     
@@ -82,15 +99,20 @@ const Registration = (props) => {
             <th>Course</th>
             <th>Title</th>
             <th>Section</th>
+            <th>Register</th>
+
           </tr>
         </thead>
         <tbody>
           {result.map(item => {
             return (
-              <tr key={item.course_id}>
-                <td><Link to={"/course/"+item.course_id}>{item.course_id}</Link></td>
-                <td><Link to={"/course/"+item.course_id}>{item.title}</Link></td>
-                <td>{ item.sec_id }</td>
+              <tr key={item[0].course_id}>
+                <td><Link to={"/course/"+item[0].course_id}>{item[0].course_id}</Link></td>
+                <td><Link to={"/course/"+item[0].course_id}>{item[0].title}</Link></td>
+                <Select options={item.map((it)=>{
+                    return {value: it.sec_id, label: it.sec_id}
+                    })} className="dropdown" onChange={handleSectionChange} defaultInputValue='1'/>
+                <td>Register</td>
               </tr>
             );
           })}
