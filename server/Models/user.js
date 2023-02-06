@@ -134,6 +134,12 @@ const dropCourse = async function(req, res){
     }
     
 }
+
+const runningCourses = async function(req, res){
+    const queryresponse = await queries.runningCourses()
+    res.status(200).send(queryresponse)
+
+}
 module.exports.studgetinfo = studgetinfo;
 module.exports.instgetinfo = instgetinfo;
 module.exports.coursegetinfo = coursegetinfo;
@@ -141,3 +147,4 @@ module.exports.searchcourseinfo = searchcourseinfo;
 module.exports.signin = signin;
 module.exports.signup = signup;
 module.exports.dropCourse = dropCourse;
+module.exports.runningCourses = runningCourses;

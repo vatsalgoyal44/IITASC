@@ -189,6 +189,18 @@ const dropCourse = async(ID, course_id, year, sem) =>{
     }
 }
 
+const runningCourses = async() => {
+    const text = 'SELECT * FROM section NATURAL JOIN reg_dates WHERE start_date::date >= all(SELECT start_date from reg_dates)'
+    const values = []
+    try{
+        const res = await pool.query(text, values)
+        return res.rows;
+    }
+    catch(err){
+        console.log(err.stack)
+    }
+}
+
 // const updateToken = async (id, token) => {
 //     const text = "UPDATE user_password SET token = $2 WHERE id = $1 RETURNING id, token"
 //     const values = [id, token]
@@ -211,4 +223,5 @@ module.exports.createuser = createuser;
 // module.exports.updateToken = updateToken;
 module.exports.finduser = finduser;
 module.exports.dropCourse = dropCourse;
+module.exports.runningCourses = runningCourses;
 

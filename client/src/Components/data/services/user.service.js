@@ -31,6 +31,19 @@ export const getcourseinfo = (course_id) => {
     return res
 };
 
+export const getrunningcourses = (year, sem) => {
+    const header=authHeader();
+    console.log(header)
+    const res = axios.get(API_URL + "runningcourses/", {
+        headers: header,
+        params: {
+            year: year,
+            sem: sem
+        } //the token is a variable which holds the token
+       });
+    return res
+};
+
 export const dropCourse = (course_id, year, sem) => {
     const header = authHeader();
     const body = {
