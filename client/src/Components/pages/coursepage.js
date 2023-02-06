@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { Navigate, useNavigate,useParams  } from 'react-router-dom';
+import { Navigate, useNavigate,useParams,Link  } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import {getcourseinfo} from "../data/services/user.service";
 import { logout } from "../statemanagement/actions/actionCreators";
@@ -12,10 +12,12 @@ const CoursePage = (props) => {
 
   const [res, setRes] = useState('')
   const [loading, setLoading] = useState(true)
+//   const [courseid, setCourseid] = useState('')
 
-
+//   to={{ pathname: '/same-component', state: { data: 'Updated Data' } }}
   let navigate = useNavigate();
   const { course_id } = useParams();
+//   setCourseid(course_id);
   const { isLoggedIn } = useSelector(state => state.auth);
   const { message } = useSelector(state => state.message);
   const dispatch = useDispatch();
@@ -57,19 +59,77 @@ const CoursePage = (props) => {
   else return (
     <div className="coursepage">
       <h1 className="name">
-        {res.data.coursedetails.title}
+            {res.data.coursedetails[0].title}
       </h1>
       <div className="about">
         <h3>About</h3>
         <ul>
-          <li>course ID: {res.data.coursedetails.course_id}</li>
-          <li>Department: {res.data.coursedetails.dept_name}</li>
-          <li>Credits: {res.data.coursedetails.credits} </li>
+          <li>Course ID: {res.data.coursedetails[0].course_id}</li>
+          <li>Department: {res.data.coursedetails[0].dept_name}</li>
+          <li>Credits: {res.data.coursedetails[0].credits} </li>
         </ul>
       </div>
 
       <div className="cursem">
-        
+      <h3>Prerequisites:</h3>
+      <table className="cursemtable">
+        <thead>
+          <tr>
+            <th>Prerequisite ID</th>
+            <th>Prerequisite Title</th>
+          </tr>
+        </thead>
+        <tbody>
+          {res.data.prereqdetails.map(item => {
+            return (
+              <tr key={item.prereq_id}>
+                <td>
+                {/* to={{ pathname: '/same-component', state: { data: 'Updated Data' } }} */}
+                {/* <Link to={{ pathname: "/course/"+item.prereq_id, state: { courseid: item.prereq_id }}}> */}
+                <Link to={"/course/"+item.prereq_id}>
+                { item.prereq_id }
+                </Link>
+                </td>
+                <td>
+                <Link to={"/course/"+item.prereq_id}>
+                { item.title }
+                </Link>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      </div>
+
+      <div className="cursem">
+      <h3>Instructors:</h3>
+      <table className="cursemtable">
+        <thead>
+          <tr>
+            <th>Instructor</th>
+            <th>Section</th>
+            <th>Semester</th>
+            <th>Year</th>
+          </tr>
+        </thead>
+        <tbody>
+          {res.data.instructordetails.map(item => {
+            return (
+              <tr key={item.sec_id}>
+                <td>
+                <Link to={"/instructor/"+item.id}>
+                { item.name }
+                </Link>
+                </td>
+                <td>{ item.sec_id }</td>
+                <td>{ item.semester }</td>
+                <td>{ item.year }</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
       </div>
     </div>
   );

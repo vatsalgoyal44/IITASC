@@ -28,7 +28,7 @@ app.use(function(req, res, next) {
 
 app.post('/auth/signup', User.signup)
 app.post('/auth/login', User.signin)
-app.get('/reg/search', async (request, response) => {
+app.get('/search', async (request, response) => {
   authJwt.verifyToken(request, response, User.searchcourseinfo)
 });
 app.get('/studinfo', async (request, response) => {
@@ -37,7 +37,7 @@ app.get('/studinfo', async (request, response) => {
 app.get('/instinfo/:id', async (request, response) => {
   authJwt.verifyToken(request, response, User.instgetinfo)
 });
-app.get('/courseinfo/:course_id', async (request, response) => {
+app.get('/course/:course_id', async (request, response) => {
   authJwt.verifyToken(request, response, User.coursegetinfo)
 });
 app.post('/studinfo/dropcourse', async(request, response) => {
@@ -45,7 +45,14 @@ app.post('/studinfo/dropcourse', async(request, response) => {
 })
 app.get('/runningcourses', async(request, response) => {
   authJwt.verifyToken(request, response,User.runningCourses)
-})
+});
+app.get('/dept/running', async (request, response) => {
+  authJwt.verifyToken(request, response, User.deptgetinfo)
+});
+app.get('/dept/courses/:dept_name', async (request, response) => {
+  authJwt.verifyToken(request, response, User.deptcoursegetinfo)
+});
+
 // app.get('/', (request, response) => {
 //     response.json({ info: 'Node.js, Express, and Postgres API' })
 //   })

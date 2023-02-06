@@ -5,6 +5,8 @@ import Profile from './Components/pages/profile';
 import Registration from './Components/pages/registration';
 import InstructorProfile from './Components/pages/instprofile';
 import CoursePage from './Components/pages/coursepage';
+import DeptPage from './Components/pages/deptpage';
+import DeptCoursePage from './Components/pages/deptcoursepage';
 import Navbar from './Components/NavigationBar/navbar'
 
 // import SignUpForm from './Components/authentication/pages/signUp';
@@ -21,7 +23,9 @@ function App() {
           <Route path="/home/registration" element={<Registration />}/>
           <Route path="/home" element={<Profile />}/>
           <Route path="/instructor/:id" element={<InstructorProfile />} />
-          <Route path="/course/:course_id" element={<CoursePage />} />
+          <Route exact path="/course/:course_id" element={<CoursePage />} />
+          <Route exact path="/course/running" element={<DeptPage />} />
+          <Route exact path="/course/running/:dept_name" element={<DeptCoursePage />} />
         </Routes>
       </BrowserRouter>
     </>
