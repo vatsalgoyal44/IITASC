@@ -74,3 +74,18 @@ export const dropCourse = (course_id, year, sem) => {
     });
     return res;
 }
+
+export const registerCourse = (course_id, year, sem, sec_id) => {
+    const header = authHeader();
+    const body = {
+        course_id: course_id,
+        year: year,
+        sem: sem,
+        sec_id:sec_id
+    }
+    const res = axios.post(API_URL + "studinfo/regcourse", {
+        headers: header,
+        data: body
+    });
+    return res;
+}

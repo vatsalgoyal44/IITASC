@@ -1,0 +1,25 @@
+{
+  "name": "iitasc",
+  "version": "1.0.0",
+  "description": "ASC web application using React and Node",
+  "main": "index.js",
+  "scripts": {
+    "server": "nodemon server/index.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vatsalgoyal44/IITASC.git"
+  },
+  "author": "Vatsal Goyal and Sanyam Saxena",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vatsalgoyal44/IITASC/issues"
+  },
+  "homepage": "https://github.com/vatsalgoyal44/IITASC#readme",
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  }
+}

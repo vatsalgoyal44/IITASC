@@ -33,7 +33,7 @@ const Profile = (props) => {
 
   const fetchdata = ()=>{
     getstudentinfo().then((res)=>{
-      setRes(res);
+      
       console.log(res)
       if(res.status != 200){
         setLoading(true)
@@ -43,6 +43,7 @@ const Profile = (props) => {
               window.location.reload();
             })
         }
+        setRes(res);
       const courses = res.data.coursedetails
       const cursemnew = []
       const pastsemnew = []

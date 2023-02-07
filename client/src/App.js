@@ -20,8 +20,8 @@ function App() {
 
         <Routes>
           <Route path="/login" element={<LoginForm />}/>
-          <Route path="/home/registration" element={<Registration />}/>
-          <Route path="/home" element={<Profile />}/>
+          <Route exact path="/home" element={<Profile />}/>
+          <Route exact path="/home/registration" element={<Registration />}/>
           <Route path="/instructor/:id" element={<InstructorProfile />} />
           <Route exact path="/course/:course_id" element={<CoursePage />} />
           <Route exact path="/course/running" element={<DeptPage />} />

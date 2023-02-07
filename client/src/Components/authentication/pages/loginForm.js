@@ -53,7 +53,7 @@ const LoginForm = (props) => {
 }
 
   if (isLoggedIn) {
-    console.log(localStorage.getItem("user"))
+    console.log(sessionStorage.getItem("user"))
     return <Navigate to="/home" />;
   }
 

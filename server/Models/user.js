@@ -151,6 +151,21 @@ const dropCourse = async function(req, res){
     
 }
 
+const regCourse = async function(req, res){
+    const course_id = req.body.data.course_id;
+    const year = req.body.data.year;
+    const sem = req.body.data.sem;
+    const sec_id = req.body.data.sec_id;
+    const ID = req.id;
+    console.log(ID, course_id, year, sem, sec_id)
+    try{
+        await queries.dropCourse(ID, course_id, year, sem, sec_id, res);
+    }
+    catch{
+    }
+    
+}
+
 const runningCourses = async function(req, res){
     const queryresponse = await queries.runningCourses()
     res.status(200).send(queryresponse)
@@ -164,4 +179,5 @@ module.exports.coursegetinfo = coursegetinfo;
 module.exports.signin = signin;
 module.exports.signup = signup;
 module.exports.dropCourse = dropCourse;
+module.exports.regCourse = regCourse;
 module.exports.runningCourses = runningCourses;

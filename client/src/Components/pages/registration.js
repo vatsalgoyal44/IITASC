@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Navigate, useNavigate, Link  } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
-import {getrunningcourses} from "../data/services/user.service";
+import {getrunningcourses,registerCourse} from "../data/services/user.service";
 import { logout } from "../statemanagement/actions/actionCreators";
 import './profile.css';
 import ReactLoading from "react-loading";
@@ -23,7 +23,7 @@ const Registration = (props) => {
     const [pastsem, setPastsem] = useState([])
     const [items, setItems] = useState([])
     const [result, setResult] = useState([])
-
+    const [selectedOption, setSelectedOption] = useState({});
 
     let navigate = useNavigate();
     const { isLoggedIn } = useSelector(state => state.auth);
@@ -32,6 +32,16 @@ const Registration = (props) => {
 
     const fetchdata = ()=>{
         getrunningcourses().then(res => {
+            if(res.status == 401 || res.status==403 ){
+              {
+                setLoading(true)
+                dispatch(logout())
+                    .then(() => {
+                      navigate("/login");
+                      window.location.reload();
+                    })
+                }
+            }
             res = res.data.reduce(function (r, a) {
                 r[a.course_id] = r[a.course_id] || [];
                 r[a.course_id].push(a);
@@ -39,6 +49,7 @@ const Registration = (props) => {
             }, Object.create(null));
             console.log(res)
             setRes(res)
+            console.log((Object.keys(res)).map(course_id=>{return {course_id:course_id}}))
             setItems((Object.keys(res)).map(course_id=>{return {course_id:course_id}}));
             setLoading(false)
         })
@@ -48,15 +59,30 @@ const Registration = (props) => {
         fetchdata()
     }, [])
 
-    const handleSectionChange = () => {
+    const handleRegCourse = (item) => {
+      console.log(item[0].course_id, item[0].year, item[0].semester, selectedOption[item[0].course_id])
 
+      // registerCourse(item[0].course_id, item[0].year, item[0].semester, selectedOption[item[0].course_id]).then(res=>{
+      //   console.log(res)
+
+      //   // if(res.status==200){
+      //   //   const cursemnew = cursem.filter((item2)=>item2.course_id!=item.course_id)
+      //   //   setCursem(cursemnew)
+      //   // }
+      // })
+    }
+
+    const handleSectionChange = (e) => {
+      setSelectedOption({
+        ...selectedOption,
+        [e.target.name]: e.target.value,
+      });
     }
 
     const handleOnSearch = (string, results) => {
         // onSearch will have as the first callback parameter
         // the string searched and for the second the results.
         console.log(string, results)
-        console.log(results.map(result=>{return res[result.course_id]}))
         setResult(results.map(result=>{return res[result.course_id]}))
       }
     
@@ -100,7 +126,6 @@ const Registration = (props) => {
             <th>Title</th>
             <th>Section</th>
             <th>Register</th>
-
           </tr>
         </thead>
         <tbody>
@@ -109,10 +134,10 @@ const Registration = (props) => {
               <tr key={item[0].course_id}>
                 <td><Link to={"/course/"+item[0].course_id}>{item[0].course_id}</Link></td>
                 <td><Link to={"/course/"+item[0].course_id}>{item[0].title}</Link></td>
-                <Select options={item.map((it)=>{
+                <Select name={ item[0].course_id } value={selectedOption[item[0].course_id] || ''} options={item.map((it)=>{
                     return {value: it.sec_id, label: it.sec_id}
                     })} className="dropdown" onChange={handleSectionChange} defaultInputValue='1'/>
-                <td>Register</td>
+                <td><button onClick={() => handleRegCourse(item)}><a>Register</a></button></td>
               </tr>
             );
           })}

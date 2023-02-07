@@ -43,6 +43,9 @@ app.get('/course/:course_id', async (request, response) => {
 app.post('/studinfo/dropcourse', async(request, response) => {
   authJwt.verifyToken(request, response,User.dropCourse)
 })
+app.post('/studinfo/regcourse', async(request, response) => {
+  authJwt.verifyToken(request, response,User.regCourse)
+})
 app.get('/runningcourses', async(request, response) => {
   authJwt.verifyToken(request, response,User.runningCourses)
 });
