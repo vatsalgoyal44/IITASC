@@ -59,8 +59,8 @@ const Registration = (props) => {
         fetchdata()
     }, [])
 
-    const handleRegCourse = (item) => {
-      console.log(item[0].course_id, item[0].year, item[0].semester, selectedOption[item[0].course_id])
+    const handleRegCourse = (e, item) => {
+      console.log(item.course_id, item.year, item.semester, selectedOption[item.course_id])
 
       // registerCourse(item[0].course_id, item[0].year, item[0].semester, selectedOption[item[0].course_id]).then(res=>{
       //   console.log(res)
@@ -73,9 +73,10 @@ const Registration = (props) => {
     }
 
     const handleSectionChange = (e) => {
+      console.log(e)
       setSelectedOption({
         ...selectedOption,
-        [e.target.name]: e.target.value,
+        [e.name]: e.value,
       });
     }
 
@@ -92,7 +93,7 @@ const Registration = (props) => {
     }
     // console.log(data)
   
-    if (false){
+    if (loading){
       return(
       <div>
         <ReactLoading type="bubbles" color="#263238" className="loading"
@@ -137,7 +138,7 @@ const Registration = (props) => {
                 <Select name={ item[0].course_id } value={selectedOption[item[0].course_id] || ''} options={item.map((it)=>{
                     return {value: it.sec_id, label: it.sec_id}
                     })} className="dropdown" onChange={handleSectionChange} defaultInputValue='1'/>
-                <td><button onClick={() => handleRegCourse(item)}><a>Register</a></button></td>
+                <td><button onClick={e => handleRegCourse((e, item[0]))}><a>Register</a></button></td>
               </tr>
             );
           })}
