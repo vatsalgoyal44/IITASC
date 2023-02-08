@@ -262,62 +262,93 @@ const dropCourse = async(ID, course_id, year, sem) =>{
 }
 
 const regCourse = async(ID, course_id, year, sem, sec_id,res) =>{
-    // const text = 'select * from takes where id=$1 and year=$2 and sem=$3 and course_id=$4'    
-    // const values = [ID,year,sem,course_id]
-    // try{
-    //     const res = await pool.query(text1, values1)
-    //     if(){
-    //         const text1 = 'select course_id from prereq where course_id=$2 except (select course_id from takes where id=$1)'    
-    //         const values1 = [ID]
-    //         try{
-    //             const res1 = await pool.query(text1, values1)
-    //             if(){
-    //                 const text2 = 'select * from section natural join time_slot where course_id=$1 and year=$2 and sem=$3 and sec_id=$4'    
-    //                 const values2 = [course_id,year,sem,sec_id]
-    //                 try{
-    //                     const res2 = await pool.query(text2, values2)
-    //                     const text3 = 'select * from takes natural join section natural join time_slot where id=$1 and year=$2 and sem=$3'    
-    //                     const values3 = [ID,year,sem]
-    //                     try{
-    //                         const res3 = await pool.query(text3, values3)
-    //                         if(){
-    //                             const text4 = 'insert into takes(id,course_id,sec_id,semester,year) values($1,$2,$3,$4,$5)'    
-    //                             const values4 = [ID,course_id,sec_id,sem,year]
-    //                             try{
-    //                                 const res4 = await pool.query(text4, values4)
-    //                                 return{result : 'success'};
-    //                             }
-    //                             catch(err){
-    //                                 console.log(err.stack)
-    //                             }   
-    //                         }
-    //                         else{
-    //                             res.status(203).send()
-    //                         } 
-    //                     }
-    //                     catch(err){
-    //                         console.log(err.stack)
-    //                     }        
-    //                 }
-    //                 catch(err){
-    //                     console.log(err.stack)
-    //                 }    
-    //             }
-    //             else{
-    //                 res.status(202).send()
-    //             } 
-    //         }
-    //         catch(err){
-    //             console.log(err.stack)
-    //         }
-    //     }
-    //     else{
-    //         res.status(201).send()
-    //     }
-    // }
-    // catch(err){
-    //     console.log(err.stack)
-    // }
+    const text = 'select * from takes where id=$1 and year=$2 and semester=$3 and course_id=$4'    
+    const values = [ID,year,sem,course_id]
+    try{
+        const qres = await pool.query(text, values)
+        console.log('Hi0')
+        console.log(qres.rows)
+        if((qres.rows).length===0){
+            const text1 = 'select prereq_id from prereq where course_id=$1 except (select course_id from takes where id=$2)'    
+            const values1 = [course_id,ID]
+            console.log('HI0.5')
+            try{
+                const qres1 = await pool.query(text1, values1)
+                console.log('HI0.75')
+                if((qres1.rows).length===0){
+                    const text2 = 'select * from section natural join time_slot where course_id=$1 and year=$2 and semester=$3 and sec_id=$4'    
+                    console.log('HI0.8')
+                    const values2 = [course_id,year,sem,sec_id]
+                    try{
+                        const qres2 = await pool.query(text2, values2)
+                        const text3 = 'select * from takes natural join section natural join time_slot where id=$1 and year=$2 and semester=$3'    
+                        const values3 = [ID,year,sem]
+                        console.log(qres2.rows)
+                        try{
+                            const qres3 = await pool.query(text3, values3)
+                            console.log('HI5')
+                            console.log(qres3.rows)
+
+                            const list = [
+                                { id: 1, name: 'John Doe' },
+                                { id: 2, name: 'Jane Doe' },
+                                { id: 3, name: 'Jim Smith' },
+                              ];
+                              
+                            let overlap = false;
+
+                            (qres3.rows).forEach((item) => {
+                                if  (
+                                     ((qres2.rows[0].start_hr*60+qres2.rows[0].start_min >= item.start_hr*60+item.start_min*60) &&
+                                     (qres2.rows[0].start_hr*60+qres2.rows[0].start_min < item.end_hr*60+item.end_min*60 ))
+                                     ||
+                                     ((qres2.rows[0].end_hr*60+qres2.rows[0].end_min > item.start_hr*60+item.start_min*60) &&
+                                     (qres2.rows[0].end_hr*60+qres2.rows[0].end_min <= item.end_hr*60+item.end_min*60 ))
+                                    ) 
+                                    {
+                                        overlap = true;
+                                    }
+                            });
+                            
+                            if(!overlap){
+                                console.log('HI6')
+                                const text4 = 'insert into takes(id,course_id,sec_id,semester,year) values($1,$2,$3,$4,$5)'    
+                                const values4 = [ID,course_id,sec_id,sem,year]
+                                try{
+                                    const res4 = await pool.query(text4, values4)
+                                    res.status(200).send()
+                                }
+                                catch(err){
+                                    console.log(err.stack)
+                                }   
+                            }
+                            else{
+                                res.status(203).send()
+                            } 
+                        }
+                        catch(err){
+                            console.log(err.stack)
+                        }        
+                    }
+                    catch(err){
+                        console.log(err.stack)
+                    }    
+                }
+                else{
+                    res.status(202).send()
+                } 
+            }
+            catch(err){
+                console.log(err.stack)
+            }
+        }
+        else{
+            res.status(201).send()
+        }
+    }
+    catch(err){
+        console.log(err.stack)
+    }
 }
 
 const runningCourses = async() => {

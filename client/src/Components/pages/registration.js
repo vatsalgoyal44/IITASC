@@ -63,17 +63,28 @@ const Registration = (props) => {
       console.log(item.course_id, item.year, item.semester, selectedOption[item.course_id])
 
       if(!selectedOption[item.course_id]){
-
         return
       }
 
       registerCourse(item.course_id, item.year, item.semester, selectedOption[item.course_id]).then(res=>{
         console.log(res)
 
-        // if(res.status==200){
-        //   const cursemnew = cursem.filter((item2)=>item2.course_id!=item.course_id)
-        //   setCursem(cursemnew)
-        // }
+        if(res.status==200){
+          console.log("Success")
+        }
+        else if(res.status==201){
+          console.log("Course Already Registered")
+        }
+        else if(res.status==202){
+          console.log("Course Prerequisites not fulfilled")
+        }
+        else if(res.status==203){
+          console.log("Time Slot Clash with other registered courses")
+        }
+        else{
+          console.log("Unidentified Error")
+        }
+        
       })
     }
 
