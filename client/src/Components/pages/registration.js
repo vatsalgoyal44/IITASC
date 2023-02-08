@@ -72,11 +72,12 @@ const Registration = (props) => {
       // })
     }
 
-    const handleSectionChange = (e) => {
-      setSelectedOption({
-        ...selectedOption,
-        [e.target.name]: e.target.value,
-      });
+    const handleSectionChange = (e, item) => {
+      console.log("HI")
+      console.log(e, item)
+      selectedOption[item[0].course_id] = e.value
+      setSelectedOption(selectedOption);
+      console.log(selectedOption)
     }
 
     const handleOnSearch = (string, results) => {
@@ -134,9 +135,9 @@ const Registration = (props) => {
               <tr key={item[0].course_id}>
                 <td><Link to={"/course/"+item[0].course_id}>{item[0].course_id}</Link></td>
                 <td><Link to={"/course/"+item[0].course_id}>{item[0].title}</Link></td>
-                <Select name={ item[0].course_id } value={selectedOption[item[0].course_id] || ''} options={item.map((it)=>{
+                <Select name={ item[0].course_id } value={ selectedOption[item[0].course_id] || '1' } options={item.map((it)=>{
                     return {value: it.sec_id, label: it.sec_id}
-                    })} className="dropdown" onChange={handleSectionChange} defaultInputValue='1'/>
+                    })} className="dropdown" onChange={ (e, {item}) => handleSectionChange(e,item) } />
                 <td><button onClick={() => handleRegCourse(item)}><a>Register</a></button></td>
               </tr>
             );
