@@ -21,6 +21,7 @@ function App() {
       <Navbar />
 
         <Routes>
+        <Route path="/" element={<Profile />}/>
           <Route path="/login" element={<LoginForm />}/>
           <Route exact path="/home" element={<Profile />}/>
           <Route exact path="/home/registration" element={<Registration />}/>
