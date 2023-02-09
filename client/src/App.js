@@ -7,8 +7,6 @@ import CoursePage from './Components/pages/coursepage';
 import DeptPage from './Components/pages/deptpage';
 import DeptCoursePage from './Components/pages/deptcoursepage';
 import Navbar from './Components/NavigationBar/navbar'
-import { keepTheme } from './Components/pages/themes';
-import React, { useEffect } from "react";
 
 
 
@@ -16,9 +14,6 @@ import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Switch, Route } from "react-router-dom";
 
 function App() {
-  useEffect(() => {
-    keepTheme();
-})
 
   return (
     <>

@@ -23,8 +23,8 @@ const LoginForm = (props) => {
   const form = useRef();
   const checkBtn = useRef();
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
 
   const { isLoggedIn } = useSelector(state => state.auth);
   const { message } = useSelector(state => state.message);
@@ -72,9 +72,7 @@ const LoginForm = (props) => {
           <input type="text" name="username" id="username" autoComplete="off" value={username} onChange={onChangeUsername} validations={[required]}/>
           
           <label htmlFor="username">
-            <span class="content-name">
               Username
-            </span>
           </label>
           
         </div>
@@ -82,9 +80,7 @@ const LoginForm = (props) => {
           <input type="password" name="password" id="password" autoComplete="off" value={password} onChange={onChangePassword} validations={[required]}/>
           
           <label htmlFor="password">
-            <span class="content-name">
               Password
-            </span>
           </label>
           
         </div>
@@ -95,7 +91,7 @@ const LoginForm = (props) => {
               </div>
             </div>
           )}
-        <button type = "submit" ref={checkBtn}>Login</button>
+        <button type = "submit" ref={checkBtn} className="submit"><a>Login</a></button>
       </form>
       </div>
     </div>
