@@ -159,7 +159,7 @@ const regCourse = async function(req, res){
     const ID = req.id;
     console.log(ID, course_id, year, sem, sec_id)
     try{
-        await queries.dropCourse(ID, course_id, year, sem, sec_id, res);
+        await queries.regCourse(ID, course_id, year, sem, sec_id, res);
     }
     catch{
     }
