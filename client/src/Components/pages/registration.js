@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import { Navigate, useNavigate, Link  } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import {getrunningcourses,registerCourse} from "../data/services/user.service";
@@ -10,12 +10,9 @@ import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-dropdown';
 import Select from 'react-select'
-import { setMessage } from "../statemanagement/actions/messages";
 
 
-
-
-
+const Option = Select.Option;
 
 const Registration = (props) => {
 
@@ -26,10 +23,10 @@ const Registration = (props) => {
     const [items, setItems] = useState([])
     const [result, setResult] = useState([])
     const [selectedOption, setSelectedOption] = useState({});
+    const [messagealert, setMessageAlert] = useState()
 
     let navigate = useNavigate();
     const { isLoggedIn } = useSelector(state => state.auth);
-    const { message } = useSelector(state => state.message);
     const dispatch = useDispatch();
 
     const fetchdata = ()=>{
@@ -65,41 +62,42 @@ const Registration = (props) => {
       console.log(item.course_id, item.year, item.semester, selectedOption[item.course_id])
 
       if(!selectedOption[item.course_id]){
+        const messagenew = "Select section"
+        window.alert(messagenew)
         return
       }
 
-      registerCourse(item.course_id, item.year, item.semester, selectedOption[item.course_id]).then(res=>{
+      const secid = selectedOption[item.course_id]
+
+      registerCourse(item.course_id, item.year, item.semester, secid).then(res=>{
         console.log(res)
 
         if(res.status==200){
           console.log("Success")
         }
         else if(res.status==201){
-          const messagenew = "Course Already Registered"
-          dispatch(setMessage(messagenew))
+          window.alert("Course already registered")
         }
         else if(res.status==202){
-          const messagenew = "Course Prerequisites not fulfilled"
-          dispatch(setMessage(messagenew))
+          window.alert("Course Prerequisites not fulfilled")
         }
         else if(res.status==203){
-          const messagenew = "Time Slot Clash with other registered courses"
-          dispatch(setMessage(messagenew))
+          window.alert("Time Slot Clash with other registered courses")
         }
         else{
-          const messagenew = "Unidentified Error"
-          dispatch(setMessage(messagenew))
+          window.alert("Unidentified Error")
         }
         
       })
     }
 
     const handleSectionChange = (e, item) => {
-      console.log("HI")
+      console.log(selectedOption[item[0].course_id])
       console.log(e, item)
       selectedOption[item[0].course_id] = e.value
       setSelectedOption(selectedOption);
-      console.log(selectedOption)
+      console.log(selectedOption[item[0].course_id])
+      
     }
 
     const handleOnSearch = (string, results) => {
@@ -128,14 +126,14 @@ const Registration = (props) => {
         <h1 className="name">
           Registration
         </h1>
-
-        {message && (
+        <div>{messagealert && (
             <div className="form-group">
               <div className="alert alert-danger" role="alert">
-                {message}
+                {messagealert}
               </div>
             </div>
-          )}
+          )}</div>
+        
         <div className="search">
           <ReactSearchAutocomplete
             items={items}
@@ -167,14 +165,16 @@ const Registration = (props) => {
                 <td><Link to={"/course/"+item[0].course_id}>{item[0].title}</Link></td>
                 <Select name={ item[0].course_id } value={ selectedOption[item[0].course_id]} options={item.map((it)=>{
                     return {value: it.sec_id, label: it.sec_id}
-                    })} className="dropdown" onChange={(e) => handleSectionChange(e, item)}/>
+                    })} className="dropdown" onChange={(e) => handleSectionChange(e, item)}>{item.map(it => {return <Option>it.sec_id</Option>})}</Select>
                 <td><button onClick={(e) => handleRegCourse(e, item[0])}><a>Register</a></button></td>
               </tr>
             );
           })}
         </tbody>
       </table>
+      
       </div>
+      
     );
   }
   

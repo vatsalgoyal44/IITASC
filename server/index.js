@@ -1,10 +1,23 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+var cookieParser = require('cookie-parser');
+var sessions = require('express-session');
+
 const app = express()
 const port = 4000
 const authJwt         = require('./Services/authJwt');
 var cors = require('cors');
 app.use(cors({origin: true, credentials: true}));
+app.use(cookieParser());
+
+const oneDay = 1000 * 60 * 60 * 24;
+app.use(sessions({
+    secret: "thiskeyissupposedtobesecretdonttellanyone",
+    saveUninitialized:true,
+    cookie: { maxAge: oneDay },
+    resave: false 
+}));
+
 
 
 
