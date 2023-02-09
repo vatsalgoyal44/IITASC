@@ -49,7 +49,7 @@ const Profile = (props) => {
       const pastsemnew = []
       for(let i = 0; i < courses.length; i++){
         let course = courses[i]
-        if(course.year=='2010' && course.semester=='Spring'){
+        if(course.year=='2010' && course.semester=='Summer'){
           cursemnew.push(course)
         }
         else{

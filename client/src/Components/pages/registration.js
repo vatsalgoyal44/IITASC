@@ -10,6 +10,8 @@ import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-dropdown';
 import Select from 'react-select'
+import { setMessage } from "../statemanagement/actions/messages";
+
 
 
 
@@ -73,16 +75,20 @@ const Registration = (props) => {
           console.log("Success")
         }
         else if(res.status==201){
-          console.log("Course Already Registered")
+          const messagenew = "Course Already Registered"
+          dispatch(setMessage(messagenew))
         }
         else if(res.status==202){
-          console.log("Course Prerequisites not fulfilled")
+          const messagenew = "Course Prerequisites not fulfilled"
+          dispatch(setMessage(messagenew))
         }
         else if(res.status==203){
-          console.log("Time Slot Clash with other registered courses")
+          const messagenew = "Time Slot Clash with other registered courses"
+          dispatch(setMessage(messagenew))
         }
         else{
-          console.log("Unidentified Error")
+          const messagenew = "Unidentified Error"
+          dispatch(setMessage(messagenew))
         }
         
       })
@@ -122,6 +128,14 @@ const Registration = (props) => {
         <h1 className="name">
           Registration
         </h1>
+
+        {message && (
+            <div className="form-group">
+              <div className="alert alert-danger" role="alert">
+                {message}
+              </div>
+            </div>
+          )}
         <div className="search">
           <ReactSearchAutocomplete
             items={items}
