@@ -3,7 +3,7 @@ import { Navigate, useNavigate,useParams,Link  } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import {getinstinfo} from "../data/services/user.service";
 import { logout } from "../statemanagement/actions/actionCreators";
-import './profile.css';
+// import './profile.css';
 import ReactLoading from "react-loading";
 
 

@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import LoginForm from './Components/authentication/pages/loginForm';
 import Profile from './Components/pages/profile';
@@ -8,11 +7,19 @@ import CoursePage from './Components/pages/coursepage';
 import DeptPage from './Components/pages/deptpage';
 import DeptCoursePage from './Components/pages/deptcoursepage';
 import Navbar from './Components/NavigationBar/navbar'
+import { keepTheme } from './Components/pages/themes';
+import React, { useEffect } from "react";
+
+
 
 // import SignUpForm from './Components/authentication/pages/signUp';
 import { BrowserRouter, Routes, Switch, Route } from "react-router-dom";
 
 function App() {
+  useEffect(() => {
+    keepTheme();
+})
+
   return (
     <>
       <BrowserRouter>
