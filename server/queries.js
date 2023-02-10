@@ -127,39 +127,49 @@ const courseinfo = async (ID) => {
                   and start_time>=all (SELECT start_time from reg_dates)'
 
     const values = [ID]
-    try {
-        console.log(text)
-        console.log(values)
+    try{
         const res = await pool.query(text, values)
-        console.log(res)
-        const text2 = 'SELECT * \
-                       FROM prereq join course on (prereq_id=course.course_id)\
-                       WHERE prereq.course_id = $1'
-        const values2 = [ID]
+        const text1 = 'SELECT * \
+                       FROM course \
+                       WHERE course_id = $1'
         try {
-            const res2 = await pool.query(text2, values2)
-            console.log(res2)
-            const text3 = 'SELECT * FROM teaches natural join section natural join reg_dates natural join instructor \
-                           WHERE course_id = $1 \
-                           and start_time<=now() \
-                           and start_time>=all (SELECT start_time from reg_dates)'
-            const values3 = [ID]
-                try {
-                    const res3 = await pool.query(text3, values3)
-                    return {
-                        coursedetails: res.rows,
-                        prereqdetails: res2.rows,
-                        instructordetails: res3.rows
-                    }
+            console.log(text)
+            console.log(values)
+            const res0 = await pool.query(text1, values)
+            console.log(res)
+            const text2 = 'SELECT * \
+                           FROM prereq join course on (prereq_id=course.course_id)\
+                           WHERE prereq.course_id = $1'
+            const values2 = [ID]
+            try {
+                const res2 = await pool.query(text2, values2)
+                console.log(res2)
+                const text3 = 'SELECT * FROM teaches natural join section natural join reg_dates natural join instructor \
+                               WHERE course_id = $1 \
+                               and start_time<=now() \
+                               and start_time>=all (SELECT start_time from reg_dates)'
+                const values3 = [ID]
+                    try {
+                        const res3 = await pool.query(text3, values3)
+                        return {
+                            coursedetails: res.rows,
+                            coursedetails2: res0.rows,
+                            prereqdetails: res2.rows,
+                            instructordetails: res3.rows
+                        }
 
-                } catch (err) {
-                    console.log(err.stack)
-                }
+                    } catch (err) {
+                        console.log(err.stack)
+                    }
+            } catch (err) {
+                console.log(err.stack)
+            }
         } catch (err) {
             console.log(err.stack)
         }
-    } catch (err) {
-        console.log(err.stack)
+    }
+    catch (err) {
+
     }
 
 }
@@ -304,6 +314,9 @@ const regCourse = async(ID, course_id, year, sem, sec_id,res) =>{
                                      ||
                                      ((qres2.rows[0].end_hr*60+qres2.rows[0].end_min > item.start_hr*60+item.start_min*60) &&
                                      (qres2.rows[0].end_hr*60+qres2.rows[0].end_min <= item.end_hr*60+item.end_min*60 ))
+                                     ||
+                                     ((qres2.rows[0].start_hr*60+qres2.rows[0].start_min <= item.start_hr*60+item.start_min*60) &&
+                                     (qres2.rows[0].end_hr*60+qres2.rows[0].end_min >= item.end_hr*60+item.end_min*60 ))
                                     ) 
                                     {
                                         overlap = true;

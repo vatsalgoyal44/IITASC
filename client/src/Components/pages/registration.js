@@ -72,16 +72,16 @@ const Registration = (props) => {
       registerCourse(item.course_id, item.year, item.semester, secid).then(res=>{
         console.log(res)
 
-        if(res.status==200){
+        if(res.status===200){
           console.log("Success")
         }
-        else if(res.status==201){
+        else if(res.status===201){
           window.alert("Course already registered")
         }
-        else if(res.status==202){
+        else if(res.status===202){
           window.alert("Course Prerequisites not fulfilled")
         }
-        else if(res.status==203){
+        else if(res.status===203){
           window.alert("Time Slot Clash with other registered courses")
         }
         else{
