@@ -7,19 +7,15 @@ const login = (username, password) => {
     .post(API_URL + "login", {
       username,
       password,
-    })
+    }, {withCredentials: true})
     .then((response) => {
-    console.log(response)
-      if (response.data.accessToken) {
-        sessionStorage.setItem("user", JSON.stringify(response.data));
-      }
-
-      return response.data;
+      console.log(response)
+      return response;
     });
 };
 
 const logout = () => {
-  sessionStorage.removeItem("user");
+  return axios.get(API_URL + "/logout");
 };
 
 export default {

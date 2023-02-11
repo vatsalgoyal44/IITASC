@@ -46,14 +46,13 @@ const LoginForm = (props) => {
     // form.current.validateAll();
       dispatch(login(username, password))
         .then(() => {
-          navigate("/home");
-          window.location.reload();
+          // navigate("/home");
+          // window.location.reload();
         })
   
 }
 
   if (isLoggedIn) {
-    console.log(sessionStorage.getItem("user"))
     return <Navigate to="/home" />;
   }
 

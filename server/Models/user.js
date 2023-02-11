@@ -67,15 +67,10 @@ const signin = async function(req, res){
                 });
             }
             
-            let payload = { "username" : username};
-            var token = jwt.sign(payload, config.secret, {
-                expiresIn: 86400 // 24 hours
-            });
-
-            res.status(200).send({
-                id: user.id,
-                accessToken: token
-            });
+            req.session.userid=req.body.username;
+            console.log(req)
+            // console.log(session)
+            res.status(200).send();
             
         })
         })

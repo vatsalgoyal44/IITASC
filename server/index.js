@@ -7,16 +7,19 @@ const app = express()
 const port = 4000
 const authJwt         = require('./Services/authJwt');
 var cors = require('cors');
-app.use(cors({origin: true, credentials: true}));
+
+app.use(cors({origin: 'http://localhost:3000',
+credentials: true
+}));
 app.use(cookieParser());
 
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(sessions({
     secret: "thiskeyissupposedtobesecretdonttellanyone",
-    saveUninitialized:true,
-    cookie: { maxAge: oneDay },
-    resave: false 
-}));
+    name: "cookieID",
+    saveUninitialized:false,
+    resave: false
+  }));
 
 
 
@@ -31,19 +34,17 @@ app.use(
   })
 )
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.header("Access-Control-Allow-Headers", "x-access-token, Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
-
 
 app.post('/auth/signup', User.signup)
 app.post('/auth/login', User.signin)
 // app.get('/search', async (request, response) => {
 //   authJwt.verifyToken(request, response, User.searchcourseinfo)
 // });
+app.get('/logout',(req,res) => {
+  req.session.destroy();
+  res.status(200).send();
+});
+
 app.get('/studinfo', async (request, response) => {
   authJwt.verifyToken(request, response, User.studgetinfo)
 });
