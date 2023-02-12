@@ -28,9 +28,6 @@ app.use(sessions({
 
   }));
 
-
-
-
 const User = require('./Models/user.js');
 const { request, response } = require('express');
 
@@ -63,6 +60,9 @@ app.get('/auth/check', (req,res) => {
 
 app.get('/studinfo', async (request, response) => {
   authJwt.verifyToken(request, response, User.studgetinfo)
+});
+app.get('/instrstudinfo/:studid', async (request, response) => {
+  authJwt.verifyToken(request, response, User.instrstudgetinfo)
 });
 app.get('/instinfo/:id', async (request, response) => {
   authJwt.verifyToken(request, response, User.instgetinfo)

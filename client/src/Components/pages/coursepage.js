@@ -56,27 +56,28 @@ const CoursePage = (props) => {
         height={500} width={250} />
     </div>)
   }
-  else if(running!=true){
-    return(
-      <div>
-        <ReactLoading type="bubbles" color="#263238" className="loading"
-          height={500} width={250} />
-      </div>)
-  }
+  // else if(running!=true){
+  //   return(
+  //     <div>
+  //       <ReactLoading type="bubbles" color="#263238" className="loading"
+  //         height={500} width={250} />
+  //     </div>)
+  // }
   else return (
     <div className="coursepage">
       <h1 className="name">
-            {res.data.coursedetails[0].title}
+            {res.data.coursedetails2[0].title}
       </h1>
       <div className="about">
         <h3>About</h3>
         <ul>
-          <li>Course ID: {res.data.coursedetails[0].course_id}</li>
-          <li>Department: {res.data.coursedetails[0].dept_name}</li>
-          <li>Credits: {res.data.coursedetails[0].credits} </li>
+          <li>Course ID: {res.data.coursedetails2[0].course_id}</li>
+          <li>Department: {res.data.coursedetails2[0].dept_name}</li>
+          <li>Credits: {res.data.coursedetails2[0].credits} </li>
         </ul>
       </div>
 
+      {res.data.prereqdetails.length!==0 ? (     
       <div className="cursem">
       <h3>Prerequisites:</h3>
       <table className="cursemtable">
@@ -108,36 +109,58 @@ const CoursePage = (props) => {
         </tbody>
       </table>
       </div>
-
-      <div className="cursem">
-      <h3>Instructors:</h3>
-      <table className="cursemtable">
-        <thead>
+      ):(
+        <div className="cursem">
+        <h3>Prerequisites:</h3>
+        <table className="cursemtable">
           <tr>
-            <th>Instructor</th>
-            <th>Section</th>
-            <th>Semester</th>
-            <th>Year</th>
+            <th>No Prerequisite</th>
           </tr>
-        </thead>
-        <tbody>
-          {res.data.instructordetails.map(item => {
-            return (
-              <tr key={item.sec_id}>
-                <td>
-                <Link to={"/instructor/"+item.id}>
-                { item.name }
-                </Link>
-                </td>
-                <td>{ item.sec_id }</td>
-                <td>{ item.semester }</td>
-                <td>{ item.year }</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+        </table>
+        </div>
+      )
+      }
+
+      {running ? (
+        <div className="cursem">
+        <h3>Instructors:</h3>
+        <table className="cursemtable">
+          <thead>
+            <tr>
+              <th>Instructor</th>
+              <th>Section</th>
+              <th>Room Number</th>
+              <th>Building</th>
+              <th>Semester</th>
+              <th>Year</th>
+            </tr>
+          </thead>
+          <tbody>
+            {res.data.instructordetails.map(item => {
+              return (
+                <tr key={item.sec_id}>
+                  <td>
+                  <Link to={"/instructor/"+item.id}>
+                  { item.name }
+                  </Link>
+                  </td>
+                  <td>{ item.sec_id }</td>
+                  <td>{ item.room_number }</td>
+                  <td>{ item.building }</td>
+                  <td>{ item.semester }</td>
+                  <td>{ item.year }</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+        </div>
+    ) : 
+    (
+      <div className="cursem">
+      <h3>Course is not running this semester</h3>
       </div>
+    )}    
     </div>
   );
 }

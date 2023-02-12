@@ -22,33 +22,6 @@ const finduser = async (username) => {
 
 }
 
-// const departmentlist = () => {
-//     pool.query('SELECT * FROM department', (error, results) => {
-//         if (error) {
-//             throw error
-//         }
-//         return results.rows
-//     })
-// }
-
-// const courselist = (department) => {
-//     pool.query('SELECT * FROM course WHERE dept_name = ${department}', (error, results) => {
-//         if (error) {
-//             throw error
-//         }
-//         return results.rows
-//     })
-// }
-
-const courselistall = () => {
-    pool.query('SELECT * FROM course', (error, results) => {
-        if (error) {
-            throw error
-        }
-        return results.rows
-    })
-}
-
 const studentinfo = async (ID) => {
 
     const text = 'SELECT * FROM student WHERE id = $1'
@@ -56,8 +29,22 @@ const studentinfo = async (ID) => {
 
     try {
         const res = await pool.query(text, values)
-        // return res.rows[0];
-        const text2 = 'SELECT * FROM takes NATURAL JOIN course WHERE id = $1'
+        const text2 = 'with cursem_details(yr,sem) as\
+                       (select year,semester from reg_dates\
+                        where start_time<=now() \
+                        and start_time>=all \
+                        (SELECT start_time from reg_dates where start_time <=now())\
+                        )\
+                       SELECT * \
+                       FROM takes NATURAL JOIN course, cursem_details \
+                       WHERE id = $1 \
+                       ORDER BY year DESC, \
+                       CASE semester \
+                        WHEN \'Spring\' THEN 4 \
+                        WHEN \'Summer\' THEN 3 \
+                        WHEN \'Fall\' THEN 2 \
+                        WHEN \'Winter\' THEN 1 \
+                       END'
         const values2 = [ID]
         try {
             const res2 = await pool.query(text2, values2)
@@ -76,24 +63,90 @@ const studentinfo = async (ID) => {
 
 }
 
+const instrstudentinfo = async (inst_ID,ID) => {
+
+    const text0 = 'SELECT * FROM instructor WHERE id = $1'
+    const values0 = [inst_ID]
+
+    try{
+        const res0 = await pool.query(text, values)
+        if(res0.rows.length===0){
+            return {
+                studentdetails: res0.rows,
+                coursedetails: res0.rows
+            }        
+        }
+        const text = 'SELECT * FROM student WHERE id = $1'
+        const values = [ID]
+
+        try {
+            const res = await pool.query(text, values)
+            const text2 = 'with cursem_details(yr,sem) as\
+                           (select year,semester from reg_dates\
+                            where start_time<=now() \
+                            and start_time>=all \
+                            (SELECT start_time from reg_dates where start_time <=now())\
+                            )\
+                           SELECT * \
+                           FROM takes NATURAL JOIN course, cursem_details \
+                           WHERE id = $1 \
+                           ORDER BY year DESC, \
+                           CASE semester \
+                            WHEN \'Spring\' THEN 4 \
+                            WHEN \'Summer\' THEN 3 \
+                            WHEN \'Fall\' THEN 2 \
+                            WHEN \'Winter\' THEN 1 \
+                           END'
+            const values2 = [ID]
+            try {
+                const res2 = await pool.query(text2, values2)
+                // return res.rows[0];
+                return {
+                    studentdetails: res.rows[0],
+                    coursedetails: res2.rows
+                }
+
+            } catch (err) {
+                console.log(err.stack)
+            }
+        } catch (err) {
+            console.log(err.stack)
+        }
+    } catch (err) {
+        console.log(err.stack)
+    }
+
+}
+
 const instinfo = async (ID) => {
     //beware of dept_name in both course and instructor
     const text = 'SELECT * \
                   FROM instructor natural join teaches join course using(course_ID) natural join section natural join reg_dates \
                   WHERE id = $1 \
                   and start_time<=now() \
-                  and start_time>=all (SELECT start_time from reg_dates) \
-                  ORDER BY course_id ASC'
+                  and start_time>=all (SELECT start_time from reg_dates where start_time<=now())'
+
     const values = [ID]
 
     try {
         const res = await pool.query(text, values)
-        const text2 = 'SELECT * \
-                       FROM instructor natural join teaches join course using(course_ID) natural join section natural join reg_dates \
-                       WHERE id = $1 \
-                       and start_time<=now() \
-                       and start_time<some (SELECT start_time from reg_dates)\
-                       ORDER BY start_time DESC, course_id ASC'
+
+        const text2 =  'with cursem_details(yr,sem) as\
+                        (select year,semester from reg_dates\
+                        where start_time<=now() \
+                        and start_time>=all \
+                        (SELECT start_time from reg_dates where start_time <=now()))\
+                        SELECT * \
+                        FROM instructor natural join teaches join course using(course_ID) natural join section, cursem_details \
+                        WHERE id = $1 \
+                        and (year,semester)!=(yr,sem) \
+                        ORDER BY year DESC, \
+                        CASE semester \
+                         WHEN \'Spring\' THEN 4 \
+                         WHEN \'Summer\' THEN 3 \
+                         WHEN \'Fall\' THEN 2 \
+                         WHEN \'Winter\' THEN 1 \
+                        END'
         const values2 = [ID]
         try {
             const res2 = await pool.query(text2, values2)
@@ -124,42 +177,52 @@ const courseinfo = async (ID) => {
                   FROM course natural join section natural join reg_dates \
                   WHERE course_id = $1 \
                   and start_time<=now() \
-                  and start_time>=all (SELECT start_time from reg_dates)'
+                  and start_time>=all (SELECT start_time from reg_dates where start_time <=now())'
 
     const values = [ID]
-    try {
-        console.log(text)
-        console.log(values)
+    try{
         const res = await pool.query(text, values)
-        console.log(res)
-        const text2 = 'SELECT * \
-                       FROM prereq join course on (prereq_id=course.course_id)\
-                       WHERE prereq.course_id = $1'
-        const values2 = [ID]
+        const text1 = 'SELECT * \
+                       FROM course \
+                       WHERE course_id = $1'
         try {
-            const res2 = await pool.query(text2, values2)
-            console.log(res2)
-            const text3 = 'SELECT * FROM teaches natural join section natural join reg_dates natural join instructor \
-                           WHERE course_id = $1 \
-                           and start_time<=now() \
-                           and start_time>=all (SELECT start_time from reg_dates)'
-            const values3 = [ID]
-                try {
-                    const res3 = await pool.query(text3, values3)
-                    return {
-                        coursedetails: res.rows,
-                        prereqdetails: res2.rows,
-                        instructordetails: res3.rows
-                    }
+            console.log(text)
+            console.log(values)
+            const res0 = await pool.query(text1, values)
+            console.log(res)
+            const text2 = 'SELECT * \
+                           FROM prereq join course on (prereq_id=course.course_id)\
+                           WHERE prereq.course_id = $1'
+            const values2 = [ID]
+            try {
+                const res2 = await pool.query(text2, values2)
+                console.log(res2)
+                const text3 = 'SELECT * FROM teaches natural join section natural join reg_dates natural join instructor \
+                               WHERE course_id = $1 \
+                               and start_time<=now() \
+                               and start_time>=all (SELECT start_time from reg_dates where start_time<=now())'
+                const values3 = [ID]
+                    try {
+                        const res3 = await pool.query(text3, values3)
+                        return {
+                            coursedetails: res.rows,
+                            coursedetails2: res0.rows,
+                            prereqdetails: res2.rows,
+                            instructordetails: res3.rows
+                        }
 
-                } catch (err) {
-                    console.log(err.stack)
-                }
+                    } catch (err) {
+                        console.log(err.stack)
+                    }
+            } catch (err) {
+                console.log(err.stack)
+            }
         } catch (err) {
             console.log(err.stack)
         }
-    } catch (err) {
-        console.log(err.stack)
+    }
+    catch (err) {
+
     }
 
 }
@@ -172,7 +235,7 @@ const deptinfo = async () => {
                   (select * from department as B natural join course join section using(course_ID) natural join reg_dates \
                   WHERE A.dept_name=B.dept_name \
                   and start_time<=now() \
-                  and start_time>=all (SELECT start_time from reg_dates))'
+                  and start_time>=all (SELECT start_time from reg_dates where start_time<=now()))'
     try {
         console.log(text)
         const res = await pool.query(text)
@@ -192,7 +255,7 @@ const deptcourseinfo = async (dept_name) => {
                   FROM course natural join section natural join reg_dates \
                   WHERE dept_name=$1 and sec_id=$2\
                   and start_time<=now() \
-                  and start_time>=all (SELECT start_time from reg_dates)'
+                  and start_time>=all (SELECT start_time from reg_dates where start_time<=now())'
     const values = [dept_name, 1]
     try {
         console.log(text)
@@ -289,21 +352,23 @@ const regCourse = async(ID, course_id, year, sem, sec_id,res) =>{
                             console.log('HI5')
                             console.log(qres3.rows)
 
-                            const list = [
-                                { id: 1, name: 'John Doe' },
-                                { id: 2, name: 'Jane Doe' },
-                                { id: 3, name: 'Jim Smith' },
-                              ];
-                              
                             let overlap = false;
 
                             (qres3.rows).forEach((item) => {
-                                if  (
+                                if  ((
                                      ((qres2.rows[0].start_hr*60+qres2.rows[0].start_min >= item.start_hr*60+item.start_min*60) &&
                                      (qres2.rows[0].start_hr*60+qres2.rows[0].start_min < item.end_hr*60+item.end_min*60 ))
                                      ||
                                      ((qres2.rows[0].end_hr*60+qres2.rows[0].end_min > item.start_hr*60+item.start_min*60) &&
                                      (qres2.rows[0].end_hr*60+qres2.rows[0].end_min <= item.end_hr*60+item.end_min*60 ))
+                                     ||
+                                     ((qres2.rows[0].start_hr*60+qres2.rows[0].start_min <= item.start_hr*60+item.start_min*60) &&
+                                     (qres2.rows[0].end_hr*60+qres2.rows[0].end_min >= item.end_hr*60+item.end_min*60 ))
+                                     )
+                                     &&
+                                     (
+                                     qres2.rows[0].day==item.day
+                                     )
                                     ) 
                                     {
                                         overlap = true;
@@ -380,13 +445,13 @@ const runningCourses = async() => {
 // }
 
 module.exports.studentinfo = studentinfo;
+module.exports.instrstudentinfo = instrstudentinfo;
 module.exports.deptinfo = deptinfo;
 module.exports.deptcourseinfo = deptcourseinfo;
 module.exports.searchcourse = searchcourse;
 module.exports.courseinfo = courseinfo;
 module.exports.instinfo = instinfo;
 module.exports.createuser = createuser;
-// module.exports.updateToken = updateToken;
 module.exports.finduser = finduser;
 module.exports.dropCourse = dropCourse;
 module.exports.regCourse = regCourse;

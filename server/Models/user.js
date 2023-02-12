@@ -79,6 +79,14 @@ const signin = async function(req, res){
     });
 };
 
+const instrstudgetinfo = async function(req, res){
+    const ID=req.id;
+    const { studid } = req.params
+    const queryresponse = await queries.instrstudentinfo(ID,studid);
+    console.log(queryresponse)
+    res.status(200).send(queryresponse)
+}
+
 const studgetinfo = async function(req, res){
     const ID = req.id;
     const queryresponse = await queries.studentinfo(ID);
@@ -167,6 +175,7 @@ const runningCourses = async function(req, res){
 
 }
 module.exports.studgetinfo = studgetinfo;
+module.exports.instrstudgetinfo = instrstudgetinfo;
 module.exports.deptgetinfo = deptgetinfo;
 module.exports.deptcoursegetinfo = deptcoursegetinfo;
 module.exports.instgetinfo = instgetinfo;
