@@ -15,7 +15,7 @@ const login = (username, password) => {
 };
 
 const logout = () => {
-  return axios.get(API_URL + "/logout");
+  return axios.get(API_URL + "logout", {withCredentials: true});
 };
 
 export default {

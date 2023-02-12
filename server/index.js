@@ -40,7 +40,7 @@ app.post('/auth/login', User.signin)
 // app.get('/search', async (request, response) => {
 //   authJwt.verifyToken(request, response, User.searchcourseinfo)
 // });
-app.get('/logout',(req,res) => {
+app.get('/auth/logout',(req,res) => {
   req.session.destroy();
   res.status(200).send();
 });
