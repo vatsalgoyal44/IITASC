@@ -20,7 +20,7 @@ export const getcourseinfo = (course_id) => {
 };
 
 export const getdeptinfo = () => {
-    const res = axios.get(API_URL + "dept/running");
+    const res = axios.get(API_URL + "dept/running", { withCredentials: true });
     console.log(res)
     return res
 };
