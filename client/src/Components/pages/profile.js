@@ -47,13 +47,21 @@ const Profile = (props) => {
       const courses = res.data.coursedetails
       const cursemnew = []
       const pastsemnew = []
+      const sem_dict = {
+        'Spring': 0,
+        'Summer': 1,
+        'Fall': 3,
+        'Winter': 4
+      }
       for(let i = 0; i < courses.length; i++){
         let course = courses[i]
-        if(course.year=='2010' && course.semester=='Summer'){
+        if(course.year==course.yr && course.semester==course.sem){
           cursemnew.push(course)
         }
         else{
-          pastsemnew.push(course)
+          if(course.year<course.yr ||(course.year===course.yr && sem_dict[course.semester]<sem_dict[course.sem])){
+            pastsemnew.push(course)
+          }
         }
       }
       const grouped = Object.values(pastsemnew.reduce((acc, item) => {
@@ -115,8 +123,8 @@ const Profile = (props) => {
       <table className="cursemtable">
         <thead>
           <tr>
-            <th>Course</th>
-            <th>Title</th>
+            <th>Course ID</th>
+            <th>Course Title</th>
             <th>Section</th>
             <th>Drop Course</th>
           </tr>
@@ -143,8 +151,8 @@ const Profile = (props) => {
           <table className="cursemtable">
             <thead>
               <tr>
-                <th>Course</th>
-                <th>Title</th>
+                <th>Course ID</th>
+                <th>Course Title</th>
                 <th>Section</th>
                 <th>Grade</th>
               </tr>
