@@ -51,6 +51,14 @@ const Registration = (props) => {
             console.log((Object.keys(res)).map(course_id=>{return {course_id:course_id, title: res[course_id][0].title}}))
             setItems((Object.keys(res)).map(course_id=>{return {course_id:course_id, title: res[course_id][0].title}}));
             setLoading(false)
+        }).catch(()=>{
+          console.log(res.status)
+          setLoading(true)
+            dispatch(logout())
+                .then(() => {
+                  navigate("/login");
+                  window.location.reload();
+                })
         })
     }
 

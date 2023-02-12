@@ -10,10 +10,11 @@ verifyToken = (req, res, next) => {
   if(session.userid){
     req.id = session.userid
     next(req,res);
-  }else
+  }else{
   res.status(403).send({
     message: "No session provided!"
   });  
+}
 };
 
 const authJwt = {

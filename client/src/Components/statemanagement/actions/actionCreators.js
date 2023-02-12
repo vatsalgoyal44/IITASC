@@ -42,6 +42,7 @@ import {
   export const logout = () => (dispatch) => {
     return AuthService.logout().then(
       ()=>{
+        console.log("AKBDHBF")
         dispatch({
           type: LOGOUT,
         });

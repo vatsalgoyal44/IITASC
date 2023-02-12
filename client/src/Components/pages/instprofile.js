@@ -33,6 +33,14 @@ const InstructorProfile = (props) => {
               window.location.reload();
             })
       }
+    }).catch(()=>{
+      console.log(res.status)
+      setLoading(true)
+        dispatch(logout())
+            .then(() => {
+              navigate("/login");
+              window.location.reload();
+            })
     })
   }
 

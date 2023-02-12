@@ -8,7 +8,7 @@ import {
   
   let initialState = true
   AuthService.check().then((res) => {
-    if(res.status != 200){
+    if(res.status !== 200){
       initialState = false
     }
     else{

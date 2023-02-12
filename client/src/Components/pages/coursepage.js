@@ -42,6 +42,14 @@ const CoursePage = (props) => {
       else{
         setRunning(false);
       }
+    }).catch(()=>{
+      console.log(res.status)
+      setLoading(true)
+        dispatch(logout())
+            .then(() => {
+              navigate("/login");
+              window.location.reload();
+            })
     })
   }
 
