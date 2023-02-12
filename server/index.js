@@ -18,9 +18,6 @@ app.use(sessions({
     resave: false 
 }));
 
-
-
-
 const User = require('./Models/user.js');
 const { request, response } = require('express');
 
@@ -46,6 +43,9 @@ app.post('/auth/login', User.signin)
 // });
 app.get('/studinfo', async (request, response) => {
   authJwt.verifyToken(request, response, User.studgetinfo)
+});
+app.get('/instrstudinfo/:studid', async (request, response) => {
+  authJwt.verifyToken(request, response, User.instrstudgetinfo)
 });
 app.get('/instinfo/:id', async (request, response) => {
   authJwt.verifyToken(request, response, User.instgetinfo)
