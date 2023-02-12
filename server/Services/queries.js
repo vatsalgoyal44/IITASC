@@ -2,7 +2,7 @@ const Pool = require('pg').Pool
 const fs = require("fs");
 const path = require("path");
 
-var config = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'config.txt')).toString())
+var config = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../config.txt')).toString())
 const pool = new Pool({
     user: config.user,
     host: config.host,

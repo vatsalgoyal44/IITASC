@@ -1,5 +1,5 @@
 const bcrypt          = require('bcrypt')                         // bcrypt will encrypt passwords to be saved in db
-const queries         = require('../queries')  
+const queries         = require('../Services/queries')  
 
 
 const hashPassword = (password) => {
