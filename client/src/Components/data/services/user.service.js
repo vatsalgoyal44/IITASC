@@ -45,7 +45,7 @@ export const dropCourse = (course_id, year, sem) => {
     }
     const res = axios.post(API_URL + "studinfo/dropcourse", {
         data: body, 
-        withCredentials: true
+    }, {        withCredentials: true
     });
     return res;
 }
@@ -58,8 +58,7 @@ export const registerCourse = (course_id, year, sem, sec_id) => {
         sec_id:sec_id
     }
     const res = axios.post(API_URL + "studinfo/regcourse", {
-        data: body, 
-        withCredentials: true
-    });
+        data: body
+    },{withCredentials: true});
     return res;
 }

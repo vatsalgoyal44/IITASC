@@ -16,7 +16,6 @@ const InstructorProfile = (props) => {
 
   let navigate = useNavigate();
   const { id } = useParams();
-  const { isLoggedIn } = useSelector(state => state.auth);
   const { message } = useSelector(state => state.message);
   const dispatch = useDispatch();
 
@@ -40,12 +39,6 @@ const InstructorProfile = (props) => {
   useEffect(() => {
     fetchdata()
   }, [id])
-
-  
-  if (!isLoggedIn) {
-    return <Navigate to="/login" />;
-  }
-  // console.log(data)
 
   if (loading){
     return(

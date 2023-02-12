@@ -6,7 +6,6 @@ const config = require("../config.js");
 verifyToken = (req, res, next) => {
   
   session=req.session;
-  console.log("HI",session)
 
   if(session.userid){
     req.id = session.userid

@@ -3,12 +3,18 @@ import {
     LOGIN_FAIL,
     LOGOUT,
   } from "../actions/actionTypes";
+
+  import AuthService from "../../authentication/services/auth.service";
   
-  const user = JSON.parse(sessionStorage.getItem("user"));
-  
-  const initialState = user
-    ? { isLoggedIn: true, user }
-    : { isLoggedIn: false, user: null };
+  let initialState = true
+  AuthService.check().then((res) => {
+    if(res.status != 200){
+      initialState = false
+    }
+    else{
+      console.log("TRUE")
+    }
+  })
   
   export default function (state = initialState, action) {
     const { type, payload } = action;

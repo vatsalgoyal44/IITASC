@@ -83,9 +83,9 @@ const Profile = (props) => {
   }, [])
 
   
-  if (!isLoggedIn) {
-    return <Navigate to="/login" />;
-  }
+  // if (!isLoggedIn) {
+  //   return <Navigate to="/login" />;
+  // }
   // console.log(data)
 
   if (loading){

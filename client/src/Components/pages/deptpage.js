@@ -14,7 +14,6 @@ const DeptPage = (props) => {
 
 
   let navigate = useNavigate();
-  const { isLoggedIn } = useSelector(state => state.auth);
   const { message } = useSelector(state => state.message);
   const dispatch = useDispatch();
 
@@ -39,11 +38,6 @@ const DeptPage = (props) => {
     fetchdata()
   }, [])
 
-  
-  if (!isLoggedIn) {
-    return <Navigate to="/login" />;
-  }
-  // console.log(data)
 
   if (loading){
     return(

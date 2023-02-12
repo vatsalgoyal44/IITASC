@@ -16,9 +16,16 @@ app.use(cookieParser());
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(sessions({
     secret: "thiskeyissupposedtobesecretdonttellanyone",
+    rolling: true,
     name: "cookieID",
     saveUninitialized:false,
-    resave: false
+    resave: false,
+    cookie: {
+      expires: oneDay,
+      sameSite: false,
+
+   }
+
   }));
 
 
@@ -43,6 +50,15 @@ app.post('/auth/login', User.signin)
 app.get('/auth/logout',(req,res) => {
   req.session.destroy();
   res.status(200).send();
+});
+
+app.get('/auth/check', (req,res) => {
+  if(req.session.userid){
+    res.status(200).send();
+  }
+  else{
+    res.status(400).send();
+  }
 });
 
 app.get('/studinfo', async (request, response) => {

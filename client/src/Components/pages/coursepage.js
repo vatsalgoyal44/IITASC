@@ -18,7 +18,6 @@ const CoursePage = (props) => {
   let navigate = useNavigate();
   const { course_id } = useParams();
 //   setCourseid(course_id);
-  const { isLoggedIn } = useSelector(state => state.auth);
   const { message } = useSelector(state => state.message);
   const dispatch = useDispatch();
   const [running, setRunning] = useState(false);
@@ -49,12 +48,6 @@ const CoursePage = (props) => {
   useEffect(() => {
     fetchdata()
   }, [course_id])
-
-  
-  if (!isLoggedIn) {
-    return <Navigate to="/login" />;
-  }
-  // console.log(data)
 
   if (loading){
     return(

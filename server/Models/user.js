@@ -68,7 +68,7 @@ const signin = async function(req, res){
             }
             
             req.session.userid=req.body.username;
-            console.log(req)
+            res.locals.user = res.locals.user;
             // console.log(session)
             res.status(200).send();
             
