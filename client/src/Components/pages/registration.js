@@ -45,9 +45,7 @@ const Registration = (props) => {
                 r[a.course_id].push(a);
                 return r;
             }, Object.create(null));
-            console.log("ASKBSHDA",res)
             setRes(res)
-            console.log(res["CS-101"][0].title)
             console.log((Object.keys(res)).map(course_id=>{return {course_id:course_id, title: res[course_id][0].title}}))
             setItems((Object.keys(res)).map(course_id=>{return {course_id:course_id, title: res[course_id][0].title}}));
             setLoading(false)
