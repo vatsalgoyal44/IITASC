@@ -26,7 +26,6 @@ const Registration = (props) => {
     const [messagealert, setMessageAlert] = useState()
 
     let navigate = useNavigate();
-    const { isLoggedIn } = useSelector(state => state.auth);
     const dispatch = useDispatch();
 
     const fetchdata = ()=>{
@@ -46,11 +45,18 @@ const Registration = (props) => {
                 r[a.course_id].push(a);
                 return r;
             }, Object.create(null));
-            console.log(res)
             setRes(res)
-            console.log((Object.keys(res)).map(course_id=>{return {course_id:course_id}}))
-            setItems((Object.keys(res)).map(course_id=>{return {course_id:course_id}}));
+            console.log((Object.keys(res)).map(course_id=>{return {course_id:course_id, title: res[course_id][0].title}}))
+            setItems((Object.keys(res)).map(course_id=>{return {course_id:course_id, title: res[course_id][0].title}}));
             setLoading(false)
+        }).catch(()=>{
+          console.log(res.status)
+          setLoading(true)
+            dispatch(logout())
+                .then(() => {
+                  navigate("/login");
+                  window.location.reload();
+                })
         })
     }
 
@@ -88,6 +94,8 @@ const Registration = (props) => {
           window.alert("Unidentified Error")
         }
         
+        window.location.reload();
+
       })
     }
 
@@ -106,11 +114,7 @@ const Registration = (props) => {
         console.log(string, results)
         setResult(results.map(result=>{return res[result.course_id]}))
       }
-    
-    
-    if (!isLoggedIn) {
-        return <Navigate to="/login" />;
-    }
+
     // console.log(data)
   
     if (loading){
@@ -137,7 +141,7 @@ const Registration = (props) => {
         <div className="search">
           <ReactSearchAutocomplete
             items={items}
-            fuseOptions={{ keys: ["course_id"] }}
+            fuseOptions={{ keys: ["course_id", "title"] }}
             resultStringKeyName={"course_id"}
 
             onSearch={handleOnSearch}

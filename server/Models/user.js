@@ -1,12 +1,5 @@
-const environment     = process.env.NODE_ENV || 'development';    // set environment
-// const configuration   = require('../../knexfile')[environment];   // pull in correct db with env configs
 const bcrypt          = require('bcrypt')                         // bcrypt will encrypt passwords to be saved in db
-const crypto          = require('crypto')
-const queries         = require('../queries')  
-const jwt             = require("jsonwebtoken");
-const config          = require('../config');
-const { get } = require('http');
-const authJwt         = require('../Services/authJwt');
+const queries         = require('../Services/queries')  
 
 
 const hashPassword = (password) => {
@@ -26,10 +19,7 @@ const signup = async function(req, res){
       user.password = hashedPassword
     })
     .then(() => {
-        const token = jwt.sign({ username: user.username }, config.secret, {
-            expiresIn: 86400 // 24 hours
-          });
-        queries.createuser(user, token).then(user => {
+        queries.createuser(user).then(user => {
             //   delete user.password
               res.status(201).send(user)
             }).catch((err) => console.error(err))
@@ -67,15 +57,10 @@ const signin = async function(req, res){
                 });
             }
             
-            let payload = { "username" : username};
-            var token = jwt.sign(payload, config.secret, {
-                expiresIn: 86400 // 24 hours
-            });
-
-            res.status(200).send({
-                id: user.id,
-                accessToken: token
-            });
+            req.session.userid=req.body.username;
+            res.locals.user = res.locals.user;
+            // console.log(session)
+            res.status(200).send();
             
         })
         })

@@ -1,5 +1,8 @@
-const config = require('./config');
 const Pool = require('pg').Pool
+const fs = require("fs");
+const path = require("path");
+
+var config = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../config.txt')).toString())
 const pool = new Pool({
     user: config.user,
     host: config.host,
@@ -271,13 +274,12 @@ const deptcourseinfo = async (dept_name) => {
 }
 
 
-const createuser = async (user, token) => {
+const createuser = async (user) => {
     const text = "INSERT INTO user_password (id, hashed_password) VALUES ($1, $2) RETURNING id"
     const values = [user.username, user.password]
 
     try {
         const res = await pool.query(text, values)
-        res.rows[0].token = token
         return res.rows[0]
         
     } catch (err) {

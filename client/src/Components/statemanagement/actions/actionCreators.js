@@ -40,10 +40,17 @@ import {
   };
   
   export const logout = () => (dispatch) => {
-    AuthService.logout();
+    return AuthService.logout().then(
+      ()=>{
+        console.log("AKBDHBF")
+        dispatch({
+          type: LOGOUT,
+        });
+        return Promise.resolve()
+      }
+
+    );
   
-    dispatch({
-      type: LOGOUT,
-    });
+    
   };
   

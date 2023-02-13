@@ -46,14 +46,13 @@ const LoginForm = (props) => {
     // form.current.validateAll();
       dispatch(login(username, password))
         .then(() => {
-          navigate("/home");
-          window.location.reload();
+          // navigate("/home");
+          // window.location.reload();
         })
   
 }
 
   if (isLoggedIn) {
-    console.log(sessionStorage.getItem("user"))
     return <Navigate to="/home" />;
   }
 
@@ -64,11 +63,11 @@ const LoginForm = (props) => {
 
 
   return (
-    <div class="LoginForm">
-      <div class="center">
-      <h1 class>Login</h1>
+    <div className="LoginForm">
+      <div className="center">
+      <h1>Login</h1>
       <form method="post" onSubmit={handleLogin} ref={form}>
-        <div class="textfield">
+        <div className="textfield">
           <input type="text" name="username" id="username" autoComplete="off" value={username} onChange={onChangeUsername} validations={[required]}/>
           
           <label htmlFor="username">
@@ -76,7 +75,7 @@ const LoginForm = (props) => {
           </label>
           
         </div>
-        <div class="textfield">
+        <div className="textfield">
           <input type="password" name="password" id="password" autoComplete="off" value={password} onChange={onChangePassword} validations={[required]}/>
           
           <label htmlFor="password">

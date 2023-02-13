@@ -1,18 +1,38 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate  } from 'react-router-dom';
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import {
     Link
 } from "react-router-dom";
 import './navbar.css';
 
 import { logout } from "../statemanagement/actions/actionCreators";
+import authService from "../authentication/services/auth.service";
 
 const Navbar = () => {
   let navigate = useNavigate();
   const dispatch = useDispatch();
+  const pathname = window.location.pathname
 
-  const { isLoggedIn } = useSelector(state => state.auth);
+  const [isLoggedIn, setAuth] = useState(false)
+  const [currentUrl, setCurrentUrl] = React.useState(pathname)
+    React.useEffect(() => {
+    setCurrentUrl(pathname)
+    }, [pathname])
+
+
+  useEffect(() => {
+    authService.check().then((res)=>{
+        console.log(res.status)
+        if(res.status===200){
+            
+            setAuth(true)
+        }
+        else{
+            setAuth(false)
+        }
+    })
+  }, [currentUrl])
 
   if (!isLoggedIn) {
     return <></>;

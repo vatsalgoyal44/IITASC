@@ -16,8 +16,6 @@ const Profile = (props) => {
   const [pastsem, setPastsem] = useState([])
 
   let navigate = useNavigate();
-  const { isLoggedIn } = useSelector(state => state.auth);
-  const { message } = useSelector(state => state.message);
   const dispatch = useDispatch();
 
   const handledropCourse = (item) => {
@@ -36,6 +34,7 @@ const Profile = (props) => {
       
       console.log(res)
       if(res.status != 200){
+        console.log(res.status)
         setLoading(true)
         dispatch(logout())
             .then(() => {
@@ -84,6 +83,15 @@ const Profile = (props) => {
       setLoading(false)
 
     })
+    .catch(()=>{
+      console.log(res.status)
+      setLoading(true)
+        dispatch(logout())
+            .then(() => {
+              navigate("/login");
+              window.location.reload();
+            })
+    })
   }
 
   useEffect(() => {
@@ -91,9 +99,9 @@ const Profile = (props) => {
   }, [])
 
   
-  if (!isLoggedIn) {
-    return <Navigate to="/login" />;
-  }
+  // if (!isLoggedIn) {
+  //   return <Navigate to="/login" />;
+  // }
   // console.log(data)
 
   if (loading){
