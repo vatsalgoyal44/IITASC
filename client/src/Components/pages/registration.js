@@ -30,7 +30,8 @@ const Registration = (props) => {
 
     const fetchdata = ()=>{
         getrunningcourses().then(res => {
-            if(res.status == 401 || res.status==403 ){
+          console.log(res.status)
+          if(res.status == 401 || res.status==403 ){
               {
                 setLoading(true)
                 dispatch(logout())
@@ -47,7 +48,6 @@ const Registration = (props) => {
             }, Object.create(null));
             console.log("ASKBSHDA",res)
             setRes(res)
-            console.log(res["CS-101"][0].title)
             console.log((Object.keys(res)).map(course_id=>{return {course_id:course_id, title: res[course_id][0].title}}))
             setItems((Object.keys(res)).map(course_id=>{return {course_id:course_id, title: res[course_id][0].title}}));
             setLoading(false)

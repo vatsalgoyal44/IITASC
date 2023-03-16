@@ -424,7 +424,8 @@ const runningCourses = async() => {
     const values = []
     try{
         const res = await pool.query(text, values)
-        console.log(res);
+        console.log("HIIIIIIIIIIIIIIIIIIIIIII");
+        console.log(res.rows);
         return res.rows;
     }
     catch(err){

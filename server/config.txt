@@ -1,0 +1,7 @@
+{
+  "user": "sanyam",
+  "host": "localhost",
+  "database": "lab4_big",
+  "password": "easy",
+  "port": "5432"
+}
